@@ -10,8 +10,10 @@ import '../Order/orderscreen.dart';
 import '../Profile/profilescreen.dart';
 
 class UserBottomNavBar extends StatefulWidget {
+  final int index;
   const UserBottomNavBar({
     Key? key,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -19,7 +21,13 @@ class UserBottomNavBar extends StatefulWidget {
 }
 
 class _UserBottomNavBarState extends State<UserBottomNavBar> {
-  int selectedIndex = 0;
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.index;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -30,7 +38,7 @@ class _UserBottomNavBarState extends State<UserBottomNavBar> {
   final tab = const [
     DashboardScreen(),
     CategoryScreen(),
-    OrderScreen(),
+    CategoryScreen(),
     ProfileScreen(),
   ];
 
@@ -43,41 +51,59 @@ class _UserBottomNavBarState extends State<UserBottomNavBar> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-                activeIcon: Image.asset(Assets.home1,
-                    scale: 3, color: MyColors.primaryCustom),
-                icon: Image.asset(
-                  Assets.home1,
-                  scale: 3,
+                activeIcon: SizedBox(
+                  height: 30,
+                  child: Image.asset(Assets.home1,
+                      scale: 5, color: MyColors.primaryCustom),
+                ),
+                icon: SizedBox(
+                  height: 30,
+                  child: Image.asset(
+                    Assets.home1,
+                    scale: 5,
+                  ),
                 ),
                 label: "Home"),
             BottomNavigationBarItem(
-                activeIcon: Padding(
-                  padding: const EdgeInsets.all(7.0),
-                  child: Image.asset(Assets.category1,
-                      scale: 3, color: MyColors.primaryCustom),
+                activeIcon: SizedBox(
+                  height: 30,
+                  child: Image.asset(Assets.foodH,
+                      scale: 5, color: MyColors.primaryCustom),
                 ),
-                icon: Padding(
-                  padding: const EdgeInsets.all(7.0),
+                icon: SizedBox(
+                  height: 30,
                   child: Image.asset(
-                    Assets.category1,
-                    scale: 3,
+                    Assets.foodH,
+                    scale: 5,
                   ),
                 ),
-                label: "Category"),
+                label: "Makan Mate"),
             BottomNavigationBarItem(
-                activeIcon: Image.asset(Assets.order1,
-                    scale: 3, color: MyColors.primaryCustom),
-                icon: Image.asset(
-                  Assets.order1,
-                  scale: 3,
+                activeIcon: SizedBox(
+                  height: 30,
+                  child: Image.asset(Assets.grocery,
+                      scale: 5, color: MyColors.primaryCustom),
                 ),
-                label: "Order"),
+                icon: SizedBox(
+                  height: 30,
+                  child: Image.asset(
+                    Assets.grocery,
+                    scale: 5,
+                  ),
+                ),
+                label: "Makan Mart"),
             BottomNavigationBarItem(
-                activeIcon: Image.asset(Assets.profile1,
-                    scale: 3, color: MyColors.primaryCustom),
-                icon: Image.asset(
-                  Assets.profile1,
-                  scale: 3,
+                activeIcon: SizedBox(
+                  height: 30,
+                  child: Image.asset(Assets.profile1,
+                      scale: 5, color: MyColors.primaryCustom),
+                ),
+                icon: SizedBox(
+                  height: 30,
+                  child: Image.asset(
+                    Assets.profile1,
+                    scale: 5,
+                  ),
                 ),
                 label: "Profile"),
           ],

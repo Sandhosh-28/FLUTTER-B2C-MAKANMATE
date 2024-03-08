@@ -6,6 +6,7 @@ import 'package:makkanmate/Const/colors.dart';
 
 import '../../Const/assets.dart';
 import '../../Const/size.dart';
+import '../Widget/bottomnavbar.dart';
 import 'dashboardcontroller.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -88,83 +89,138 @@ class _DashboardScreenState extends State<DashboardScreen> {
           padding: const EdgeInsets.all(18.0),
           child: Column(
             children: [
-              (controller.bannerImageList.isNotEmpty)
-                  ? SizedBox(
-                      height: height(context) / 5,
-                      width: double.infinity,
-                      child: CarouselSlider.builder(
-                        carouselController: controller.carouselController,
-                        itemCount: controller.bannerImageList.length,
-                        itemBuilder: (context, index, realIndex) {
-                          return (controller.bannerImageList[index]
-                                      .bannerImageFilePath ==
-                                  null)
-                              ? Container()
-                              : Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: SizedBox(
-                                      width: width(context),
-                                      child:
-                                          // Image.asset(
-                                          //   Assets.banner,
-                                          //   fit: BoxFit.fill,
-                                          // )
-                                          Image.network(
-                                        controller.bannerImageList[index]
-                                            .bannerImageFilePath!
-                                            .toString(),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                        },
-                        options: CarouselOptions(
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          autoPlay: true,
-                          aspectRatio: 0.6,
-                          height: double.infinity,
-                          viewportFraction: 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              controller.currentIndex = index;
-                            });
-                          },
-                        ),
-                      ),
-                    )
-                  : Container(),
+              bannerImg(),
               const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              GridView(
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 15,
+                ),
                 children: [
-                  const Text(
-                    "MAKAN MART",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const UserBottomNavBar(index: 1),
+                        ),
+                      );
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      fit: StackFit.expand,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.asset(
+                            Assets.food,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: MyColors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(18.0),
+                            child: Text(
+                              "MAKAN MATE",
+                              textAlign: TextAlign.center,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: MyColors.whiteTextFormField,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const UserBottomNavBar(index: 2),
                         ),
-                      ))
+                      );
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      fit: StackFit.expand,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.asset(
+                            Assets.food,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: MyColors.black.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                        ),
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(18.0),
+                            child: Text(
+                              "MAKAN MART",
+                              textAlign: TextAlign.center,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: MyColors.whiteTextFormField,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 15),
-              SizedBox(
-                height: 300,
-                child: martListView(),
-              ),
-              const SizedBox(height: 15),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     const Text(
+              //       "MAKAN MART",
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 18,
+              //       ),
+              //     ),
+              //     TextButton(
+              //         onPressed: () {},
+              //         child: const Text(
+              //           "See All",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 18,
+              //           ),
+              //         ))
+              //   ],
+              // ),
+              // const SizedBox(height: 15),
+              // SizedBox(
+              //   height: 300,
+              //   child: martListView(),
+              // ),
+              // const SizedBox(height: 15),
               ClipRRect(
                   borderRadius: BorderRadius.circular(15.0),
                   child: SizedBox(
@@ -174,61 +230,113 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         fit: BoxFit.fill,
                       ))),
               const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "OUR CATERING MENU",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ))
-                ],
-              ),
-              const SizedBox(height: 15),
-              cateringMenuList(),
-              const SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "FEATURED ITEMS",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ))
-                ],
-              ),
-              const SizedBox(height: 15),
-              SizedBox(
-                height: 300,
-                child: featuredListView(),
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     const Text(
+              //       "OUR CATERING MENU",
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 18,
+              //       ),
+              //     ),
+              //     TextButton(
+              //         onPressed: () {},
+              //         child: const Text(
+              //           "See All",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 18,
+              //           ),
+              //         ))
+              //   ],
+              // ),
+              // const SizedBox(height: 15),
+              // cateringMenuList(),
+              // const SizedBox(height: 15),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     const Text(
+              //       "FEATURED ITEMS",
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: 18,
+              //       ),
+              //     ),
+              //     TextButton(
+              //         onPressed: () {},
+              //         child: const Text(
+              //           "See All",
+              //           style: TextStyle(
+              //             fontWeight: FontWeight.bold,
+              //             fontSize: 18,
+              //           ),
+              //         ))
+              //   ],
+              // ),
+              // const SizedBox(height: 15),
+              // SizedBox(
+              //   height: 300,
+              //   child: featuredListView(),
+              // ),
             ],
           ),
         ),
       );
     });
+  }
+
+  ///BANNER WITH API
+  bannerImg() {
+    return (controller.bannerImageList.isNotEmpty)
+        ? SizedBox(
+            height: height(context) / 4,
+            width: double.infinity,
+            child: CarouselSlider.builder(
+              carouselController: controller.carouselController,
+              itemCount: controller.bannerImageList.length,
+              itemBuilder: (BuildContext context, int index, int realIndex) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: SizedBox(
+                        width: width(context),
+                        child: Image.asset(
+                          controller.bannerImageList[index].bannerImageFilePath
+                              .toString(),
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                );
+              },
+              options: CarouselOptions(
+                scrollPhysics: const BouncingScrollPhysics(),
+                autoPlay: true,
+                aspectRatio: 0.6,
+                height: double.infinity,
+                viewportFraction: 1,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    controller.currentIndex = index;
+                  });
+                },
+              ),
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: SizedBox(
+                  width: width(context),
+                  child: Image.asset(
+                    Assets.banner,
+                    fit: BoxFit.fill,
+                  )),
+            ),
+          );
   }
 
   martListView() {

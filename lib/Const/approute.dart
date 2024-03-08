@@ -54,7 +54,9 @@ final pages = [
   GetPage(
       name: Routes.registrationScreen, page: () => const RegistrationScreen()),
   GetPage(name: Routes.loginScreen, page: () => const LoginScreen()),
-  GetPage(name: Routes.userBottomNavBar, page: () => const UserBottomNavBar()),
+  GetPage(
+      name: Routes.userBottomNavBar,
+      page: () => const UserBottomNavBar(index: 0)),
   GetPage(name: Routes.dashboardScreen, page: () => const DashboardScreen()),
   GetPage(
       name: Routes.editProfileScreen, page: () => const EditProfileScreen()),

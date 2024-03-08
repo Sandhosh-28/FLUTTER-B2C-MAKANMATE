@@ -35,5 +35,7 @@ class Assets {
   static const String doller = "assets/images/doller.png";
   static const String plusButton = "assets/images/Plus.png";
   static const String minusButton = "assets/images/Minus.png";
+  static const String grocery = "assets/images/grocery.png";
+  static const String foodH = "assets/images/foodH.png";
   static const String successfully = "assets/images/successfully.gif";
 }
