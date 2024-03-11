@@ -1,522 +1,890 @@
-import 'dart:convert';
-
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-
-ProductModel productModelFromJson(String str) =>
-    ProductModel.fromJson(json.decode(str));
-String productModelToJson(ProductModel data) => json.encode(data.toJson());
-
 class ProductModel {
   ProductModel({
-    int? orgId,
-    dynamic branchCode,
-    String? code,
-    String? name,
-    String? productCode,
-    String? productName,
-    String? specification,
-    String? category,
-    String? subCategory,
-    String? categoryName,
-    String? subCategoryName,
-    String? uom,
-    dynamic uomName,
-    num? pcsPerCarton,
-    String? productType,
-    String? brand,
-    num? weight,
-    num? unitCost,
-    num? averageCost,
-    num? pcsPrice,
-    num? cartonPrice,
-    String? barCode,
-    num? displayOrder,
-    bool? isActive,
-    bool? isStock,
-    String? createdBy,
-    String? createdOn,
-    String? changedBy,
-    String? changedOn,
-    num? sellingCost,
-    double? sellingBoxCost,
-    dynamic stockQty,
-    dynamic stockBoxQty,
-    dynamic stockPcsQty,
-    String? salesAccount,
-    String? inventoryAccount,
-    String? cOGAccount,
-    dynamic productImageString,
-    dynamic productImage,
-    String? createdOnString,
-    String? changedOnString,
-    String? supplierCode,
-    String? supplierName,
-    num? taxPerc,
-    dynamic productBarcode,
-    dynamic boxCount,
-    dynamic productImgBase64String,
-    String? productImageFileName,
-    String? productImagePath,
-    num? minSellingCost,
-    num? minSellingBoxCost,
-    String? tag,
-    bool? isWeight,
-    dynamic uomPriceDetail,
-    dynamic stockWQty,
-    num? unitMarginPerc,
-    num? boxMarginPerc,
-    dynamic haveTransaction,
-    dynamic ecommerceDetail,
-  }) {
-    _orgId = orgId;
-    _branchCode = branchCode;
-    _code = code;
-    _name = name;
-    _productCode = productCode;
-    _productName = productName;
-    _specification = specification;
-    _category = category;
-    _subCategory = subCategory;
-    _categoryName = categoryName;
-    _subCategoryName = subCategoryName;
-    _uom = uom;
-    _uomName = uomName;
-    _pcsPerCarton = pcsPerCarton;
-    _productType = productType;
-    _brand = brand;
-    _weight = weight;
-    _unitCost = unitCost;
-    _averageCost = averageCost;
-    _pcsPrice = pcsPrice;
-    _cartonPrice = cartonPrice;
-    _barCode = barCode;
-    _displayOrder = displayOrder;
-    _isActive = isActive;
-    _isStock = isStock;
-    _createdBy = createdBy;
-    _createdOn = createdOn;
-    _changedBy = changedBy;
-    _changedOn = changedOn;
-    _sellingCost = sellingCost;
-    _sellingBoxCost = sellingBoxCost;
-    _stockQty = stockQty;
-    _stockBoxQty = stockBoxQty;
-    _stockPcsQty = stockPcsQty;
-    _salesAccount = salesAccount;
-    _inventoryAccount = inventoryAccount;
-    _cOGAccount = cOGAccount;
-    _productImageString = productImageString;
-    _productImage = productImage;
-    _createdOnString = createdOnString;
-    _changedOnString = changedOnString;
-    _supplierCode = supplierCode;
-    _supplierName = supplierName;
-    _taxPerc = taxPerc;
-    _productBarcode = productBarcode;
-    _boxCount = boxCount;
-    _productImgBase64String = productImgBase64String;
-    _productImageFileName = productImageFileName;
-    _productImagePath = productImagePath;
-    _minSellingCost = minSellingCost;
-    _minSellingBoxCost = minSellingBoxCost;
-    _tag = tag;
-    _isWeight = isWeight;
-    _uomPriceDetail = uomPriceDetail;
-    _stockWQty = stockWQty;
-    _unitMarginPerc = unitMarginPerc;
-    _boxMarginPerc = boxMarginPerc;
-    _haveTransaction = haveTransaction;
-    _ecommerceDetail = ecommerceDetail;
-  }
+    this.productName,
+    this.orgId,
+    this.branchCode,
+    this.code,
+    this.name,
+    this.productCode,
+    this.specification,
+    this.category,
+    this.subCategory,
+    this.categoryName,
+    this.categoryShortUrl,
+    this.subCategoryName,
+    this.subCategoryShortUrl,
+    this.uom,
+    this.uomName,
+    this.pcsPerCarton,
+    this.productType,
+    this.brand,
+    this.weight,
+    this.unitCost,
+    this.averageCost,
+    this.pcsPrice,
+    this.cartonPrice,
+    this.barCode,
+    this.displayOrder,
+    this.isActive,
+    this.isStock,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+    this.sellingCost,
+    this.sellingBoxCost,
+    this.stockQty,
+    this.stockBoxQty,
+    this.stockPcsQty,
+    this.salesAccount,
+    this.inventoryAccount,
+    this.cOGAccount,
+    this.productImageString,
+    this.productImage,
+    this.createdOnString,
+    this.changedOnString,
+    this.supplierCode,
+    this.supplierName,
+    this.taxPerc,
+    this.productBarcode,
+    this.boxCount,
+    this.productImgBase64String,
+    this.productImageFileName,
+    this.productImagePath,
+    this.minSellingCost,
+    this.minSellingBoxCost,
+    this.tag,
+    this.isWeight,
+    this.uomPriceDetail,
+    this.stockWQty,
+    this.unitMarginPerc,
+    this.boxMarginPerc,
+    this.haveTransaction,
+    this.ecommerceDetail,
+    this.ecommerceGalleryImages,
+    this.haveBatch,
+    this.haveSerialNo,
+    this.haveExpiryDate,
+    this.haveMfDate,
+    this.pOSMinSellingPrice,
+    this.pOSSellingPrice,
+    this.publishToPos,
+    this.isOpenItem,
+    this.taxCode,
+    this.taxType,
+    this.unitPrice,
+    this.qty,
+    this.branchPrice,
+    this.productshorturl,
+    this.subCategoryL2Code,
+    this.touchCategoryCode,
+    this.touchCategoryName,
+    this.subCategoryL2Name,
+    this.subcategoryL2ShortUrl,
+    this.isTouchPad,
+    this.productTags,
+    this.relatedProductInfo,
+    this.masterCustomAddOn,
+    this.productTagHeaderInfo,
+  });
 
   ProductModel.fromJson(dynamic json, {bool forSharedPreference = false}) {
-    _orgId = json['OrgId'];
-    _branchCode = json['BranchCode'];
-    _code = json['Code'];
-    _name = json['Name'];
-    _productCode = json['ProductCode'];
-    _productName = json['ProductName'];
-    _specification = json['Specification'];
-    _category = json['Category'];
-    _subCategory = json['SubCategory'];
-    _categoryName = json['CategoryName'];
-    _subCategoryName = json['SubCategoryName'];
-    _uom = json['Uom'];
-    _uomName = json['UomName'];
-    _pcsPerCarton = json['PcsPerCarton'];
-    _productType = json['ProductType'];
-    _brand = json['Brand'];
-    _weight = json['Weight'];
-    _unitCost = json['UnitCost'];
-    _averageCost = json['AverageCost'];
-    _pcsPrice = json['PcsPrice'];
-    _cartonPrice = json['CartonPrice'];
-    _barCode = json['BarCode'];
-    _displayOrder = json['DisplayOrder'];
-    _isActive = json['IsActive'];
-    _isStock = json['IsStock'];
-    _createdBy = json['CreatedBy'];
-    _createdOn = json['CreatedOn'];
-    _changedBy = json['ChangedBy'];
-    _changedOn = json['ChangedOn'];
-    _sellingCost = json['SellingCost'];
-    _sellingBoxCost = json['SellingBoxCost'];
-    _stockQty = json['StockQty'];
-    _stockBoxQty = json['StockBoxQty'];
-    _stockPcsQty = json['StockPcsQty'];
-    _salesAccount = json['SalesAccount'];
-    _inventoryAccount = json['InventoryAccount'];
-    _cOGAccount = json['COGAccount'];
-    _productImageString = json['ProductImageString'];
-    _productImage = json['ProductImage'];
-    _createdOnString = json['CreatedOnString'];
-    _changedOnString = json['ChangedOnString'];
-    _supplierCode = json['SupplierCode'];
-    _supplierName = json['SupplierName'];
-    _taxPerc = json['TaxPerc'];
-    _productBarcode = json['ProductBarcode'];
-    _boxCount = json['BoxCount'];
-    _productImgBase64String = json['ProductImg_Base64String'];
-    _productImageFileName = json['ProductImageFileName'];
-    _productImagePath = json['ProductImagePath'];
-    _minSellingCost = json['MinSellingCost'];
-    _minSellingBoxCost = json['MinSellingBoxCost'];
-    _tag = json['Tag'];
-    _isWeight = json['IsWeight'];
-    _uomPriceDetail = json['UomPriceDetail'];
-    _stockWQty = json['StockWQty'];
-    _unitMarginPerc = json['UnitMarginPerc'];
-    _boxMarginPerc = json['BoxMarginPerc'];
-    _haveTransaction = json['HaveTransaction'];
-    _ecommerceDetail = json['EcommerceDetail'];
-    if (forSharedPreference == true) {
-      qtycount = json['qtycount']  as int? ?? 0;
+    productName = json['ProductName'];
+    orgId = json['OrgId'];
+    branchCode = json['BranchCode'];
+    code = json['Code'];
+    name = json['Name'];
+    productCode = json['ProductCode'];
+    specification = json['Specification'];
+    category = json['Category'];
+    subCategory = json['SubCategory'];
+    categoryName = json['CategoryName'];
+    categoryShortUrl = json['CategoryShortUrl'];
+    subCategoryName = json['SubCategoryName'];
+    subCategoryShortUrl = json['SubCategoryShortUrl'];
+    uom = json['Uom'];
+    uomName = json['UomName'];
+    pcsPerCarton = json['PcsPerCarton'];
+    productType = json['ProductType'];
+    brand = json['Brand'];
+    weight = json['Weight'];
+    unitCost = json['UnitCost'];
+    averageCost = json['AverageCost'];
+    pcsPrice = json['PcsPrice'];
+    cartonPrice = json['CartonPrice'];
+    barCode = json['BarCode'];
+    displayOrder = json['DisplayOrder'];
+    isActive = json['IsActive'];
+    isStock = json['IsStock'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+    sellingCost = json['SellingCost'];
+    sellingBoxCost = json['SellingBoxCost'];
+    stockQty = json['StockQty'];
+    stockBoxQty = json['StockBoxQty'];
+    stockPcsQty = json['StockPcsQty'];
+    salesAccount = json['SalesAccount'];
+    inventoryAccount = json['InventoryAccount'];
+    cOGAccount = json['COGAccount'];
+    productImageString = json['ProductImageString'];
+    productImage = json['ProductImage'];
+    createdOnString = json['CreatedOnString'];
+    changedOnString = json['ChangedOnString'];
+    supplierCode = json['SupplierCode'];
+    supplierName = json['SupplierName'];
+    taxPerc = json['TaxPerc'];
+    if (json['ProductBarcode'] != null) {
+      productBarcode = [];
+      json['ProductBarcode'].forEach((v) {
+        productBarcode?.add(ProductBarcode.fromJson(v));
+      });
+    }
+    boxCount = json['BoxCount'];
+    productImgBase64String = json['ProductImg_Base64String'];
+    productImageFileName = json['ProductImageFileName'];
+    productImagePath = json['ProductImagePath'];
+    minSellingCost = json['MinSellingCost'];
+    minSellingBoxCost = json['MinSellingBoxCost'];
+    tag = json['Tag'];
+    isWeight = json['IsWeight'];
+    if (json['UomPriceDetail'] != null) {
+      uomPriceDetail = [];
+      json['UomPriceDetail'].forEach((v) {
+        uomPriceDetail?.add(UomPriceDetail.fromJson(v));
+      });
+    }
+    stockWQty = json['StockWQty'];
+    unitMarginPerc = json['UnitMarginPerc'];
+    boxMarginPerc = json['BoxMarginPerc'];
+    haveTransaction = json['HaveTransaction'];
+    if (json['EcommerceDetail'] != null) {
+      ecommerceDetail = [];
+      json['EcommerceDetail'].forEach((v) {
+        ecommerceDetail?.add(EcommerceDetail.fromJson(v));
+      });
+    }
+    if (json['EcommerceGalleryImages'] != null) {
+      ecommerceGalleryImages = [];
+      json['EcommerceGalleryImages'].forEach((v) {
+        ecommerceGalleryImages?.add(EcommerceGalleryImages.fromJson(v));
+      });
+    }
+    haveBatch = json['HaveBatch'];
+    haveSerialNo = json['HaveSerialNo'];
+    haveExpiryDate = json['HaveExpiryDate'];
+    haveMfDate = json['HaveMfDate'];
+    pOSMinSellingPrice = json['POSMinSellingPrice'];
+    pOSSellingPrice = json['POSSellingPrice'];
+    publishToPos = json['PublishToPos'];
+    isOpenItem = json['IsOpenItem'];
+    taxCode = json['TaxCode'];
+    taxType = json['TaxType'];
+    unitPrice = json['UnitPrice'];
+    qty = json['Qty'];
+    if (json['BranchPrice'] != null) {
+      branchPrice = [];
+      json['BranchPrice'].forEach((v) {
+        branchPrice?.add(BranchPrice.fromJson(v));
+      });
+    }
+    productshorturl = json['productshorturl'];
+    subCategoryL2Code = json['SubCategoryL2Code'];
+    touchCategoryCode = json['TouchCategoryCode'];
+    touchCategoryName = json['TouchCategoryName'];
+    subCategoryL2Name = json['SubCategoryL2Name'];
+    subcategoryL2ShortUrl = json['SubcategoryL2ShortUrl'];
+    isTouchPad = json['IsTouchPad'];
+    if (json['ProductTags'] != null) {
+      productTags = [];
+      json['ProductTags'].forEach((v) {
+        productTags?.add(ProductTags.fromJson(v));
+      });
+    }
+    if (json['RelatedProductInfo'] != null) {
+      relatedProductInfo = [];
+      json['RelatedProductInfo'].forEach((v) {
+        relatedProductInfo?.add(RelatedProductInfo.fromJson(v));
+      });
+    }
+    if (json['MasterCustomAddOn'] != null) {
+      masterCustomAddOn = [];
+      json['MasterCustomAddOn'].forEach((v) {
+        masterCustomAddOn?.add(MasterCustomAddOn.fromJson(v));
+      });
+    }
+    if (json['ProductTagHeaderInfo'] != null) {
+      productTagHeaderInfo = [];
+      json['ProductTagHeaderInfo'].forEach((v) {
+        productTagHeaderInfo?.add(ProductTagHeaderInfo.fromJson(v));
+      });
     }
   }
-  int? _orgId;
-  dynamic _branchCode;
-  String? _code;
-  String? _name;
-  String? _productCode;
-  String? _productName;
-  String? _specification;
-  String? _category;
-  String? _subCategory;
-  String? _categoryName;
-  String? _subCategoryName;
-  String? _uom;
-  dynamic _uomName;
-  num? _pcsPerCarton;
-  String? _productType;
-  String? _brand;
-  num? _weight;
-  num? _unitCost;
-  num? _averageCost;
-  num? _pcsPrice;
-  num? _cartonPrice;
-  String? _barCode;
-  num? _displayOrder;
-  bool? _isActive;
-  bool? _isStock;
-  String? _createdBy;
-  String? _createdOn;
-  String? _changedBy;
-  String? _changedOn;
-  num? _sellingCost;
-  double? _sellingBoxCost;
-  dynamic _stockQty;
-  dynamic _stockBoxQty;
-  dynamic _stockPcsQty;
-  String? _salesAccount;
-  String? _inventoryAccount;
-  String? _cOGAccount;
-  dynamic _productImageString;
-  dynamic _productImage;
-  String? _createdOnString;
-  String? _changedOnString;
-  String? _supplierCode;
-  String? _supplierName;
-  num? _taxPerc;
-  dynamic _productBarcode;
-  dynamic _boxCount;
-  dynamic _productImgBase64String;
-  String? _productImageFileName;
-  String? _productImagePath;
-  num? _minSellingCost;
-  num? _minSellingBoxCost;
-  String? _tag;
-  bool? _isWeight;
-  dynamic _uomPriceDetail;
-  dynamic _stockWQty;
-  num? _unitMarginPerc;
-  num? _boxMarginPerc;
-  dynamic _haveTransaction;
-  dynamic _ecommerceDetail;
-  int? slNo = 0;
+  String? productName;
+  int? orgId;
+  String? branchCode;
+  String? code;
+  String? name;
+  String? productCode;
+  String? specification;
+  String? category;
+  String? subCategory;
+  String? categoryName;
+  String? categoryShortUrl;
+  String? subCategoryName;
+  String? subCategoryShortUrl;
+  String? uom;
+  String? uomName;
+  int? pcsPerCarton;
+  String? productType;
+  String? brand;
+  double? weight;
+  double? unitCost;
+  double? averageCost;
+  double? pcsPrice;
+  double? cartonPrice;
+  String? barCode;
+  int? displayOrder;
+  bool? isActive;
+  bool? isStock;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+  double? sellingCost;
+  double? sellingBoxCost;
+  double? stockQty;
+  double? stockBoxQty;
+  double? stockPcsQty;
+  String? salesAccount;
+  String? inventoryAccount;
+  String? cOGAccount;
+  String? productImageString;
+  String? productImage;
+  String? createdOnString;
+  String? changedOnString;
+  String? supplierCode;
+  String? supplierName;
+  double? taxPerc;
+  List<ProductBarcode>? productBarcode;
+  int? boxCount;
+  String? productImgBase64String;
+  String? productImageFileName;
+  String? productImagePath;
+  double? minSellingCost;
+  double? minSellingBoxCost;
+  String? tag;
+  bool? isWeight;
+  List<UomPriceDetail>? uomPriceDetail;
+  double? stockWQty;
+  double? unitMarginPerc;
+  double? boxMarginPerc;
+  bool? haveTransaction;
+  List<EcommerceDetail>? ecommerceDetail;
+  List<EcommerceGalleryImages>? ecommerceGalleryImages;
+  bool? haveBatch;
+  bool? haveSerialNo;
+  bool? haveExpiryDate;
+  bool? haveMfDate;
+  double? pOSMinSellingPrice;
+  double? pOSSellingPrice;
+  bool? publishToPos;
+  bool? isOpenItem;
+  double? taxCode;
+  String? taxType;
+  double? unitPrice;
+  double? qty;
+  List<BranchPrice>? branchPrice;
+  String? productshorturl;
+  String? subCategoryL2Code;
+  String? touchCategoryCode;
+  String? touchCategoryName;
+  String? subCategoryL2Name;
+  String? subcategoryL2ShortUrl;
+  bool? isTouchPad;
+  List<ProductTags>? productTags;
+  List<RelatedProductInfo>? relatedProductInfo;
+  List<MasterCustomAddOn>? masterCustomAddOn;
+  List<ProductTagHeaderInfo>? productTagHeaderInfo;
 
-  bool isfavourite = false;
-
-  ///IncrementDecrement
-  int qtycount = 0;
-  bool isShowButtons = false;
-
-  increment() {
-    qtycount++;
-  }
-
-  decrement() {
-    if (qtycount > 0) {
-      qtycount--;
-    }
-  }
-
-  ProductModel copyWith({
-    int? orgId,
-    dynamic branchCode,
-    String? code,
-    String? name,
-    String? productCode,
-    String? productName,
-    String? specification,
-    String? category,
-    String? subCategory,
-    String? categoryName,
-    String? subCategoryName,
-    String? uom,
-    dynamic uomName,
-    num? pcsPerCarton,
-    String? productType,
-    String? brand,
-    num? weight,
-    num? unitCost,
-    num? averageCost,
-    num? pcsPrice,
-    num? cartonPrice,
-    String? barCode,
-    num? displayOrder,
-    bool? isActive,
-    bool? isStock,
-    String? createdBy,
-    String? createdOn,
-    String? changedBy,
-    String? changedOn,
-    num? sellingCost,
-    double? sellingBoxCost,
-    dynamic stockQty,
-    dynamic stockBoxQty,
-    dynamic stockPcsQty,
-    String? salesAccount,
-    String? inventoryAccount,
-    String? cOGAccount,
-    dynamic productImageString,
-    dynamic productImage,
-    String? createdOnString,
-    String? changedOnString,
-    String? supplierCode,
-    String? supplierName,
-    num? taxPerc,
-    dynamic productBarcode,
-    dynamic boxCount,
-    dynamic productImgBase64String,
-    String? productImageFileName,
-    String? productImagePath,
-    num? minSellingCost,
-    num? minSellingBoxCost,
-    String? tag,
-    bool? isWeight,
-    dynamic uomPriceDetail,
-    dynamic stockWQty,
-    num? unitMarginPerc,
-    num? boxMarginPerc,
-    dynamic haveTransaction,
-    dynamic ecommerceDetail,
-  }) =>
-      ProductModel(
-        orgId: orgId ?? _orgId,
-        branchCode: branchCode ?? _branchCode,
-        code: code ?? _code,
-        name: name ?? _name,
-        productCode: productCode ?? _productCode,
-        productName: productName ?? _productName,
-        specification: specification ?? _specification,
-        category: category ?? _category,
-        subCategory: subCategory ?? _subCategory,
-        categoryName: categoryName ?? _categoryName,
-        subCategoryName: subCategoryName ?? _subCategoryName,
-        uom: uom ?? _uom,
-        uomName: uomName ?? _uomName,
-        pcsPerCarton: pcsPerCarton ?? _pcsPerCarton,
-        productType: productType ?? _productType,
-        brand: brand ?? _brand,
-        weight: weight ?? _weight,
-        unitCost: unitCost ?? _unitCost,
-        averageCost: averageCost ?? _averageCost,
-        pcsPrice: pcsPrice ?? _pcsPrice,
-        cartonPrice: cartonPrice ?? _cartonPrice,
-        barCode: barCode ?? _barCode,
-        displayOrder: displayOrder ?? _displayOrder,
-        isActive: isActive ?? _isActive,
-        isStock: isStock ?? _isStock,
-        createdBy: createdBy ?? _createdBy,
-        createdOn: createdOn ?? _createdOn,
-        changedBy: changedBy ?? _changedBy,
-        changedOn: changedOn ?? _changedOn,
-        sellingCost: sellingCost ?? _sellingCost,
-        sellingBoxCost: sellingBoxCost ?? _sellingBoxCost,
-        stockQty: stockQty ?? _stockQty,
-        stockBoxQty: stockBoxQty ?? _stockBoxQty,
-        stockPcsQty: stockPcsQty ?? _stockPcsQty,
-        salesAccount: salesAccount ?? _salesAccount,
-        inventoryAccount: inventoryAccount ?? _inventoryAccount,
-        cOGAccount: cOGAccount ?? _cOGAccount,
-        productImageString: productImageString ?? _productImageString,
-        productImage: productImage ?? _productImage,
-        createdOnString: createdOnString ?? _createdOnString,
-        changedOnString: changedOnString ?? _changedOnString,
-        supplierCode: supplierCode ?? _supplierCode,
-        supplierName: supplierName ?? _supplierName,
-        taxPerc: taxPerc ?? _taxPerc,
-        productBarcode: productBarcode ?? _productBarcode,
-        boxCount: boxCount ?? _boxCount,
-        productImgBase64String:
-            productImgBase64String ?? _productImgBase64String,
-        productImageFileName: productImageFileName ?? _productImageFileName,
-        productImagePath: productImagePath ?? _productImagePath,
-        minSellingCost: minSellingCost ?? _minSellingCost,
-        minSellingBoxCost: minSellingBoxCost ?? _minSellingBoxCost,
-        tag: tag ?? _tag,
-        isWeight: isWeight ?? _isWeight,
-        uomPriceDetail: uomPriceDetail ?? _uomPriceDetail,
-        stockWQty: stockWQty ?? _stockWQty,
-        unitMarginPerc: unitMarginPerc ?? _unitMarginPerc,
-        boxMarginPerc: boxMarginPerc ?? _boxMarginPerc,
-        haveTransaction: haveTransaction ?? _haveTransaction,
-        ecommerceDetail: ecommerceDetail ?? _ecommerceDetail,
-      );
-  int? get orgId => _orgId;
-  dynamic get branchCode => _branchCode;
-  String? get code => _code;
-  String? get name => _name;
-  String? get productCode => _productCode;
-  String? get productName => _productName;
-  String? get specification => _specification;
-  String? get category => _category;
-  String? get subCategory => _subCategory;
-  String? get categoryName => _categoryName;
-  String? get subCategoryName => _subCategoryName;
-  String? get uom => _uom;
-  dynamic get uomName => _uomName;
-  num? get pcsPerCarton => _pcsPerCarton;
-  String? get productType => _productType;
-  String? get brand => _brand;
-  num? get weight => _weight;
-  num? get unitCost => _unitCost;
-  num? get averageCost => _averageCost;
-  num? get pcsPrice => _pcsPrice;
-  num? get cartonPrice => _cartonPrice;
-  String? get barCode => _barCode;
-  num? get displayOrder => _displayOrder;
-  bool? get isActive => _isActive;
-  bool? get isStock => _isStock;
-  String? get createdBy => _createdBy;
-  String? get createdOn => _createdOn;
-  String? get changedBy => _changedBy;
-  String? get changedOn => _changedOn;
-  num? get sellingCost => _sellingCost;
-  double? get sellingBoxCost => _sellingBoxCost;
-  dynamic get stockQty => _stockQty;
-  dynamic get stockBoxQty => _stockBoxQty;
-  dynamic get stockPcsQty => _stockPcsQty;
-  String? get salesAccount => _salesAccount;
-  String? get inventoryAccount => _inventoryAccount;
-  String? get cOGAccount => _cOGAccount;
-  dynamic get productImageString => _productImageString;
-  dynamic get productImage => _productImage;
-  String? get createdOnString => _createdOnString;
-  String? get changedOnString => _changedOnString;
-  String? get supplierCode => _supplierCode;
-  String? get supplierName => _supplierName;
-  num? get taxPerc => _taxPerc;
-  dynamic get productBarcode => _productBarcode;
-  dynamic get boxCount => _boxCount;
-  dynamic get productImgBase64String => _productImgBase64String;
-  String? get productImageFileName => _productImageFileName;
-  String? get productImagePath => _productImagePath;
-  num? get minSellingCost => _minSellingCost;
-  num? get minSellingBoxCost => _minSellingBoxCost;
-  String? get tag => _tag;
-  bool? get isWeight => _isWeight;
-  dynamic get uomPriceDetail => _uomPriceDetail;
-  dynamic get stockWQty => _stockWQty;
-  num? get unitMarginPerc => _unitMarginPerc;
-  num? get boxMarginPerc => _boxMarginPerc;
-  dynamic get haveTransaction => _haveTransaction;
-  dynamic get ecommerceDetail => _ecommerceDetail;
+  bool isFavourite = false;
 
   Map<String, dynamic> toJson({bool forSharedPreference = false}) {
     final map = <String, dynamic>{};
-    map['OrgId'] = _orgId;
-    map['BranchCode'] = _branchCode;
-    map['Code'] = _code;
-    map['Name'] = _name;
-    map['ProductCode'] = _productCode;
-    map['ProductName'] = _productName;
-    map['Specification'] = _specification;
-    map['Category'] = _category;
-    map['SubCategory'] = _subCategory;
-    map['CategoryName'] = _categoryName;
-    map['SubCategoryName'] = _subCategoryName;
-    map['Uom'] = _uom;
-    map['UomName'] = _uomName;
-    map['PcsPerCarton'] = _pcsPerCarton;
-    map['ProductType'] = _productType;
-    map['Brand'] = _brand;
-    map['Weight'] = _weight;
-    map['UnitCost'] = _unitCost;
-    map['AverageCost'] = _averageCost;
-    map['PcsPrice'] = _pcsPrice;
-    map['CartonPrice'] = _cartonPrice;
-    map['BarCode'] = _barCode;
-    map['DisplayOrder'] = _displayOrder;
-    map['IsActive'] = _isActive;
-    map['IsStock'] = _isStock;
-    map['CreatedBy'] = _createdBy;
-    map['CreatedOn'] = _createdOn;
-    map['ChangedBy'] = _changedBy;
-    map['ChangedOn'] = _changedOn;
-    map['SellingCost'] = _sellingCost;
-    map['SellingBoxCost'] = _sellingBoxCost;
-    map['StockQty'] = _stockQty;
-    map['StockBoxQty'] = _stockBoxQty;
-    map['StockPcsQty'] = _stockPcsQty;
-    map['SalesAccount'] = _salesAccount;
-    map['InventoryAccount'] = _inventoryAccount;
-    map['COGAccount'] = _cOGAccount;
-    map['ProductImageString'] = _productImageString;
-    map['ProductImage'] = _productImage;
-    map['CreatedOnString'] = _createdOnString;
-    map['ChangedOnString'] = _changedOnString;
-    map['SupplierCode'] = _supplierCode;
-    map['SupplierName'] = _supplierName;
-    map['TaxPerc'] = _taxPerc;
-    map['ProductBarcode'] = _productBarcode;
-    map['BoxCount'] = _boxCount;
-    map['ProductImg_Base64String'] = _productImgBase64String;
-    map['ProductImageFileName'] = _productImageFileName;
-    map['ProductImagePath'] = _productImagePath;
-    map['MinSellingCost'] = _minSellingCost;
-    map['MinSellingBoxCost'] = _minSellingBoxCost;
-    map['Tag'] = _tag;
-    map['IsWeight'] = _isWeight;
-    map['UomPriceDetail'] = _uomPriceDetail;
-    map['StockWQty'] = _stockWQty;
-    map['UnitMarginPerc'] = _unitMarginPerc;
-    map['BoxMarginPerc'] = _boxMarginPerc;
-    map['HaveTransaction'] = _haveTransaction;
-    map['EcommerceDetail'] = _ecommerceDetail;
-    if (forSharedPreference == true) {
-      map['qtycount'] = qtycount;
+    map['ProductName'] = productName;
+    map['OrgId'] = orgId;
+    map['BranchCode'] = branchCode;
+    map['Code'] = code;
+    map['Name'] = name;
+    map['ProductCode'] = productCode;
+    map['Specification'] = specification;
+    map['Category'] = category;
+    map['SubCategory'] = subCategory;
+    map['CategoryName'] = categoryName;
+    map['CategoryShortUrl'] = categoryShortUrl;
+    map['SubCategoryName'] = subCategoryName;
+    map['SubCategoryShortUrl'] = subCategoryShortUrl;
+    map['Uom'] = uom;
+    map['UomName'] = uomName;
+    map['PcsPerCarton'] = pcsPerCarton;
+    map['ProductType'] = productType;
+    map['Brand'] = brand;
+    map['Weight'] = weight;
+    map['UnitCost'] = unitCost;
+    map['AverageCost'] = averageCost;
+    map['PcsPrice'] = pcsPrice;
+    map['CartonPrice'] = cartonPrice;
+    map['BarCode'] = barCode;
+    map['DisplayOrder'] = displayOrder;
+    map['IsActive'] = isActive;
+    map['IsStock'] = isStock;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
+    map['SellingCost'] = sellingCost;
+    map['SellingBoxCost'] = sellingBoxCost;
+    map['StockQty'] = stockQty;
+    map['StockBoxQty'] = stockBoxQty;
+    map['StockPcsQty'] = stockPcsQty;
+    map['SalesAccount'] = salesAccount;
+    map['InventoryAccount'] = inventoryAccount;
+    map['COGAccount'] = cOGAccount;
+    map['ProductImageString'] = productImageString;
+    map['ProductImage'] = productImage;
+    map['CreatedOnString'] = createdOnString;
+    map['ChangedOnString'] = changedOnString;
+    map['SupplierCode'] = supplierCode;
+    map['SupplierName'] = supplierName;
+    map['TaxPerc'] = taxPerc;
+    if (productBarcode != null) {
+      map['ProductBarcode'] = productBarcode?.map((v) => v.toJson()).toList();
     }
+    map['BoxCount'] = boxCount;
+    map['ProductImg_Base64String'] = productImgBase64String;
+    map['ProductImageFileName'] = productImageFileName;
+    map['ProductImagePath'] = productImagePath;
+    map['MinSellingCost'] = minSellingCost;
+    map['MinSellingBoxCost'] = minSellingBoxCost;
+    map['Tag'] = tag;
+    map['IsWeight'] = isWeight;
+    if (uomPriceDetail != null) {
+      map['UomPriceDetail'] = uomPriceDetail?.map((v) => v.toJson()).toList();
+    }
+    map['StockWQty'] = stockWQty;
+    map['UnitMarginPerc'] = unitMarginPerc;
+    map['BoxMarginPerc'] = boxMarginPerc;
+    map['HaveTransaction'] = haveTransaction;
+    if (ecommerceDetail != null) {
+      map['EcommerceDetail'] = ecommerceDetail?.map((v) => v.toJson()).toList();
+    }
+    if (ecommerceGalleryImages != null) {
+      map['EcommerceGalleryImages'] =
+          ecommerceGalleryImages?.map((v) => v.toJson()).toList();
+    }
+    map['HaveBatch'] = haveBatch;
+    map['HaveSerialNo'] = haveSerialNo;
+    map['HaveExpiryDate'] = haveExpiryDate;
+    map['HaveMfDate'] = haveMfDate;
+    map['POSMinSellingPrice'] = pOSMinSellingPrice;
+    map['POSSellingPrice'] = pOSSellingPrice;
+    map['PublishToPos'] = publishToPos;
+    map['IsOpenItem'] = isOpenItem;
+    map['TaxCode'] = taxCode;
+    map['TaxType'] = taxType;
+    map['UnitPrice'] = unitPrice;
+    map['Qty'] = qty;
+    if (branchPrice != null) {
+      map['BranchPrice'] = branchPrice?.map((v) => v.toJson()).toList();
+    }
+    map['productshorturl'] = productshorturl;
+    map['SubCategoryL2Code'] = subCategoryL2Code;
+    map['TouchCategoryCode'] = touchCategoryCode;
+    map['TouchCategoryName'] = touchCategoryName;
+    map['SubCategoryL2Name'] = subCategoryL2Name;
+    map['SubcategoryL2ShortUrl'] = subcategoryL2ShortUrl;
+    map['IsTouchPad'] = isTouchPad;
+    if (productTags != null) {
+      map['ProductTags'] = productTags?.map((v) => v.toJson()).toList();
+    }
+    if (relatedProductInfo != null) {
+      map['RelatedProductInfo'] =
+          relatedProductInfo?.map((v) => v.toJson()).toList();
+    }
+    if (masterCustomAddOn != null) {
+      map['MasterCustomAddOn'] =
+          masterCustomAddOn?.map((v) => v.toJson()).toList();
+    }
+    if (productTagHeaderInfo != null) {
+      map['ProductTagHeaderInfo'] =
+          productTagHeaderInfo?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+}
+
+class ProductTagHeaderInfo {
+  ProductTagHeaderInfo({
+    this.orgId,
+    this.productCode,
+    this.tagCode,
+    this.detailTagCode,
+    this.tagDescription,
+    this.tagDetailDescription,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+  });
+
+  ProductTagHeaderInfo.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    tagCode = json['TagCode'];
+    detailTagCode = json['DetailTagCode'];
+    tagDescription = json['TagDescription'];
+    tagDetailDescription = json['TagDetailDescription'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+  }
+  int? orgId;
+  String? productCode;
+  String? tagCode;
+  String? detailTagCode;
+  String? tagDescription;
+  String? tagDetailDescription;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['TagCode'] = tagCode;
+    map['DetailTagCode'] = detailTagCode;
+    map['TagDescription'] = tagDescription;
+    map['TagDetailDescription'] = tagDetailDescription;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
+    return map;
+  }
+}
+
+class MasterCustomAddOn {
+  MasterCustomAddOn({
+    this.orgId,
+    this.productId,
+    this.customAddOnCode,
+    this.createdBy,
+    this.createdOn,
+  });
+
+  MasterCustomAddOn.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productId = json['ProductId'];
+    customAddOnCode = json['CustomAddOnCode'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+  }
+  int? orgId;
+  String? productId;
+  String? customAddOnCode;
+  String? createdBy;
+  String? createdOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductId'] = productId;
+    map['CustomAddOnCode'] = customAddOnCode;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    return map;
+  }
+}
+
+class RelatedProductInfo {
+  RelatedProductInfo({
+    this.orgId,
+    this.productCode,
+    this.relatedProductCode,
+    this.relatedProductName,
+    this.sellingCost,
+    this.imageFileName,
+    this.imageFilePath,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+  });
+
+  RelatedProductInfo.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    relatedProductCode = json['RelatedProductCode'];
+    relatedProductName = json['RelatedProductName'];
+    sellingCost = json['SellingCost'];
+    imageFileName = json['ImageFileName'];
+    imageFilePath = json['ImageFilePath'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+  }
+  int? orgId;
+  String? productCode;
+  String? relatedProductCode;
+  String? relatedProductName;
+  int? sellingCost;
+  String? imageFileName;
+  String? imageFilePath;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['RelatedProductCode'] = relatedProductCode;
+    map['RelatedProductName'] = relatedProductName;
+    map['SellingCost'] = sellingCost;
+    map['ImageFileName'] = imageFileName;
+    map['ImageFilePath'] = imageFilePath;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
+    return map;
+  }
+}
+
+class ProductTags {
+  ProductTags({
+    this.orgId,
+    this.productCode,
+    this.productName,
+    this.tagCode,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+  });
+
+  ProductTags.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    productName = json['ProductName'];
+    tagCode = json['TagCode'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+  }
+  int? orgId;
+  String? productCode;
+  String? productName;
+  String? tagCode;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['ProductName'] = productName;
+    map['TagCode'] = tagCode;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
+    return map;
+  }
+}
+
+class BranchPrice {
+  BranchPrice({
+    this.orgId,
+    this.productCode,
+    this.branchCode,
+    this.retailPrice,
+    this.minRetailPrice,
+  });
+
+  BranchPrice.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    branchCode = json['BranchCode'];
+    retailPrice = json['RetailPrice'];
+    minRetailPrice = json['MinRetailPrice'];
+  }
+  int? orgId;
+  String? productCode;
+  String? branchCode;
+  int? retailPrice;
+  int? minRetailPrice;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['BranchCode'] = branchCode;
+    map['RetailPrice'] = retailPrice;
+    map['MinRetailPrice'] = minRetailPrice;
+    return map;
+  }
+}
+
+class EcommerceGalleryImages {
+  EcommerceGalleryImages({
+    this.orgId,
+    this.productCode,
+    this.slNo,
+    this.imageFileName,
+    this.imageFilePath,
+    this.createdBy,
+    this.createdOn,
+    this.galleryImgBase64String,
+    this.galleryImage,
+  });
+
+  EcommerceGalleryImages.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    slNo = json['SlNo'];
+    imageFileName = json['ImageFileName'];
+    imageFilePath = json['ImageFilePath'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    galleryImgBase64String = json['GalleryImg_Base64String'];
+    galleryImage = json['GalleryImage'];
+  }
+  int? orgId;
+  String? productCode;
+  int? slNo;
+  String? imageFileName;
+  String? imageFilePath;
+  String? createdBy;
+  String? createdOn;
+  String? galleryImgBase64String;
+  String? galleryImage;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['SlNo'] = slNo;
+    map['ImageFileName'] = imageFileName;
+    map['ImageFilePath'] = imageFilePath;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['GalleryImg_Base64String'] = galleryImgBase64String;
+    map['GalleryImage'] = galleryImage;
+    return map;
+  }
+}
+
+class EcommerceDetail {
+  EcommerceDetail({
+    this.orgId,
+    this.productCode,
+    this.desciption,
+    this.specification,
+    this.sellingPrice,
+    this.sEOMetaTitle,
+    this.sEOMetaKeyword,
+    this.sEOMetaDescription,
+    this.publishOnWeb,
+    this.stockAvailability,
+    this.qtyOnHand,
+    this.createdBy,
+    this.createdOn,
+    this.surcharge,
+    this.stockStatus,
+    this.branch,
+    this.selectedAddons,
+    this.videoProvider,
+    this.videoLink,
+    this.haveAddon,
+  });
+
+  EcommerceDetail.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    desciption = json['Desciption'];
+    specification = json['Specification'];
+    sellingPrice = json['SellingPrice'];
+    sEOMetaTitle = json['SEOMetaTitle'];
+    sEOMetaKeyword = json['SEOMetaKeyword'];
+    sEOMetaDescription = json['SEOMetaDescription'];
+    publishOnWeb = json['PublishOnWeb'];
+    stockAvailability = json['StockAvailability'];
+    qtyOnHand = json['QtyOnHand'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    surcharge = json['Surcharge'];
+    stockStatus = json['StockStatus'];
+    branch = json['Branch'];
+    selectedAddons = json['SelectedAddons'];
+    videoProvider = json['VideoProvider'];
+    videoLink = json['VideoLink'];
+    haveAddon = json['HaveAddon'];
+  }
+  int? orgId;
+  String? productCode;
+  String? desciption;
+  String? specification;
+  int? sellingPrice;
+  String? sEOMetaTitle;
+  String? sEOMetaKeyword;
+  String? sEOMetaDescription;
+  bool? publishOnWeb;
+  bool? stockAvailability;
+  int? qtyOnHand;
+  String? createdBy;
+  String? createdOn;
+  int? surcharge;
+  String? stockStatus;
+  String? branch;
+  String? selectedAddons;
+  String? videoProvider;
+  String? videoLink;
+  bool? haveAddon;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['Desciption'] = desciption;
+    map['Specification'] = specification;
+    map['SellingPrice'] = sellingPrice;
+    map['SEOMetaTitle'] = sEOMetaTitle;
+    map['SEOMetaKeyword'] = sEOMetaKeyword;
+    map['SEOMetaDescription'] = sEOMetaDescription;
+    map['PublishOnWeb'] = publishOnWeb;
+    map['StockAvailability'] = stockAvailability;
+    map['QtyOnHand'] = qtyOnHand;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['Surcharge'] = surcharge;
+    map['StockStatus'] = stockStatus;
+    map['Branch'] = branch;
+    map['SelectedAddons'] = selectedAddons;
+    map['VideoProvider'] = videoProvider;
+    map['VideoLink'] = videoLink;
+    map['HaveAddon'] = haveAddon;
+    return map;
+  }
+}
+
+class UomPriceDetail {
+  UomPriceDetail({
+    this.orgId,
+    this.productCode,
+    this.code,
+    this.qty,
+    this.price,
+    this.isActive,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+  });
+
+  UomPriceDetail.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    code = json['Code'];
+    qty = json['Qty'];
+    price = json['Price'];
+    isActive = json['IsActive'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+  }
+  int? orgId;
+  String? productCode;
+  String? code;
+  int? qty;
+  int? price;
+  bool? isActive;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['Code'] = code;
+    map['Qty'] = qty;
+    map['Price'] = price;
+    map['IsActive'] = isActive;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
+    return map;
+  }
+}
+
+class ProductBarcode {
+  ProductBarcode({
+    this.orgId,
+    this.productCode,
+    this.productName,
+    this.barcode,
+    this.cartonPrice,
+    this.createdBy,
+    this.createdOn,
+    this.changedBy,
+    this.changedOn,
+  });
+
+  ProductBarcode.fromJson(dynamic json) {
+    orgId = json['OrgId'];
+    productCode = json['ProductCode'];
+    productName = json['ProductName'];
+    barcode = json['Barcode'];
+    cartonPrice = json['CartonPrice'];
+    createdBy = json['CreatedBy'];
+    createdOn = json['CreatedOn'];
+    changedBy = json['ChangedBy'];
+    changedOn = json['ChangedOn'];
+  }
+  int? orgId;
+  String? productCode;
+  String? productName;
+  String? barcode;
+  int? cartonPrice;
+  String? createdBy;
+  String? createdOn;
+  String? changedBy;
+  String? changedOn;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['OrgId'] = orgId;
+    map['ProductCode'] = productCode;
+    map['ProductName'] = productName;
+    map['Barcode'] = barcode;
+    map['CartonPrice'] = cartonPrice;
+    map['CreatedBy'] = createdBy;
+    map['CreatedOn'] = createdOn;
+    map['ChangedBy'] = changedBy;
+    map['ChangedOn'] = changedOn;
     return map;
   }
 }

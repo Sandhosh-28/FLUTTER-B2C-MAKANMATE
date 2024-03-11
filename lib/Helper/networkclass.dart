@@ -66,13 +66,8 @@ class NetworkManager {
         return ApiResponse(apiResponseModel: null, error: "Response Error");
       }
     } else {
-      Get.showSnackbar(
-        GetSnackBar(
-          title: "Error",
-          message: statusCode.toString(),
-          icon: const Icon(Icons.error),
-          duration: const Duration(seconds: 3),
-        ),
+      PreferenceHelper.getShowSnackBar(
+        msg: statusCode.toString(),
       );
       throw Exception('Error: $statusCode');
     }

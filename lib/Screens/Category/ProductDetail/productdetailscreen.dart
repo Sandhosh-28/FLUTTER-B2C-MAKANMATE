@@ -18,11 +18,16 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late ProductDetailController controller;
 
+  String? productCode;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     controller = Get.put(ProductDetailController());
+    productCode = Get.arguments as String;
+    print("<<<<<<<<<<<$productCode>>>>>>>>>>");
+    controller.productGetByCode(productCode);
   }
 
   ///INCREMENT - DECREMENT FUNCTION
@@ -45,241 +50,255 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 280,
-              pinned: true,
-              automaticallyImplyLeading: false,
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: const Icon(Icons.arrow_back_ios_new_outlined),
-              ),
-              title: const Text("Product Detail"),
-              flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(
-                  Assets.banner,
-                  fit: BoxFit.fill,
+    return GetBuilder<ProductDetailController>(builder: (logic) {
+      if (logic.isLoading.value == true) {
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      return Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 280,
+                pinned: true,
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new_outlined),
+                ),
+                title: const Text("Product Detail"),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Image.asset(
+                    Assets.banner,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 80,
-                      child: productGalleryListView(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Flexible(
-                                child: Text(
-                                  "Cookie Sandwich",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
+              SliverToBoxAdapter(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 80,
+                        child: productGalleryListView(),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    controller.productList.first.productName ??
+                                        "",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 20),
-                              ElevatedButton(
-                                  onPressed: () {}, child: const Text("Review"))
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened."
-                            "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16.0,
-                              color: MyColors.textGrey,
+                                const SizedBox(width: 20),
+                                ElevatedButton(
+                                    onPressed: () {},
+                                    child: const Text("Review"))
+                              ],
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Flexible(
-                                child: Text(
-                                  "Choice of top Cookie",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Card(
-                                elevation: 0,
-                                color: MyColors.lightOrange,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 8),
-                                  child: Text(
-                                    "Required".toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: MyColors.orange,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          choiceListView(),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Flexible(
-                                child: Text(
-                                  "Choice of Bottom Cookie",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Card(
-                                elevation: 0,
-                                color: MyColors.lightOrange,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 8),
-                                  child: Text(
-                                    "Required".toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: MyColors.orange,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          bottomChoiceListView(),
-                          const SizedBox(height: 10),
-                          ListTile(
-                            onTap: () {},
-                            leading: const Text(
-                              "Add Special Instructions",
+                            const SizedBox(height: 10),
+                            const Text(
+                              "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened."
+                              "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16.0,
+                                color: MyColors.textGrey,
                               ),
                             ),
-                            trailing:
-                                const Icon(Icons.arrow_forward_ios_outlined),
-                          ),
-                          const Divider(thickness: 1),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  if (counter > 1) {
-                                    setState(() {
-                                      decrement();
-                                    });
-                                  }
-                                },
-                                icon: Image.asset(Assets.minusButton),
-                                iconSize: 50,
-                              ),
-                              const SizedBox(width: 20),
-                              SizedBox(
-                                width: width(context) / 8,
-                                child: TextFormField(
-                                  textAlign: TextAlign.center,
-                                  initialValue: '$counter',
-                                  decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.all(8.0)),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Flexible(
+                                  child: Text(
+                                    "Add's On",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Card(
+                                  elevation: 0,
+                                  color: MyColors.lightOrange,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 8),
+                                    child: Text(
+                                      "Required".toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: MyColors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Obx(() {
+                              return choiceListView();
+                            }),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Flexible(
+                                  child: Text(
+                                    "Choice of Bottom Cookie",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                Card(
+                                  elevation: 0,
+                                  color: MyColors.lightOrange,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 8),
+                                    child: Text(
+                                      "Required".toUpperCase(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: MyColors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            bottomChoiceListView(),
+                            const SizedBox(height: 10),
+                            ListTile(
+                              onTap: () {},
+                              leading: const Text(
+                                "Add Special Instructions",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 16.0,
                                 ),
                               ),
-                              const SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    increment();
-                                  });
+                              trailing:
+                                  const Icon(Icons.arrow_forward_ios_outlined),
+                            ),
+                            const Divider(thickness: 1),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (counter > 1) {
+                                      setState(() {
+                                        decrement();
+                                      });
+                                    }
+                                  },
+                                  icon: Image.asset(Assets.minusButton),
+                                  iconSize: 50,
+                                ),
+                                const SizedBox(width: 20),
+                                SizedBox(
+                                  width: width(context) / 8,
+                                  child: TextFormField(
+                                    textAlign: TextAlign.center,
+                                    initialValue: '$counter',
+                                    decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.all(8.0)),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      increment();
+                                    });
+                                  },
+                                  icon: Image.asset(Assets.plusButton),
+                                  iconSize: 50,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            SubmitButton(
+                                isLoading: false,
+                                onTap: () {
+                                  Get.toNamed(Routes.placeOrderScreen);
                                 },
-                                icon: Image.asset(Assets.plusButton),
-                                iconSize: 50,
+                                title: "ADD"),
+                            const SizedBox(height: 20),
+                            const Text(
+                              "Featured Items",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          SubmitButton(
-                              isLoading: false,
-                              onTap: () {
-                                Get.toNamed(Routes.placeOrderScreen);
-                              },
-                              title: "ADD"),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Featured Items",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            height: 250,
-                            child: featuredListView(),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            "Most Popular",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              height: 250,
+                              child: featuredListView(),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            height: 250,
-                            child: mostPopularListView(),
-                          ),
-                        ],
+                            const SizedBox(height: 10),
+                            const Text(
+                              "Most Popular",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                              height: 250,
+                              child: mostPopularListView(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   ///PRODUCT GALLERY IMAGES LISTVIEW
@@ -317,24 +336,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   choiceListView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: choiceName.length,
+        itemCount: controller.productList.first.masterCustomAddOn?.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return Column(
             children: [
               Row(
                 children: [
-                  Radio<String>(
-                    value: choiceName[index],
-                    groupValue: controller.topChoiceRadio,
-                    onChanged: (String? value) {
-                      setState(() {
-                        controller.topChoiceRadio = value;
-                      });
-                    },
-                  ),
+                  // Radio<String>(
+                  //   value: choiceName[index],
+                  //   groupValue: controller.topChoiceRadio,
+                  //   onChanged: (String? value) {
+                  //     setState(() {
+                  //       controller.topChoiceRadio = value;
+                  //     });
+                  //   },
+                  // ),
                   Text(
-                    choiceName[index],
+                    controller.productList.first.masterCustomAddOn?[index]
+                            .productId ??
+                        "",
                     style: const TextStyle(
                       fontSize: 16.0,
                       color: MyColors.textGrey,

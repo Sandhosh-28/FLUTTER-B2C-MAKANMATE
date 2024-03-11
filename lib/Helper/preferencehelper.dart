@@ -17,23 +17,6 @@ class PreferenceHelper {
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();
 
-  // static showSnackBar(
-  //     {required BuildContext? context, String? msg, Duration? duration}) {
-  //   if (msg != null && msg.isNotEmpty) {
-  //     final messenger = ScaffoldMessenger.of(context!);
-  //     messenger.showSnackBar(SnackBar(
-  //       shape:
-  //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-  //       margin: const EdgeInsets.all(20),
-  //       backgroundColor: MyColors.red,
-  //       content: Text(
-  //         msg,
-  //       ),
-  //       duration: duration ?? const Duration(seconds: 2),
-  //     ));
-  //   }
-  // }
-
   static getShowSnackBar(
       {BuildContext? context, String? msg, Duration? duration}) {
     Get.showSnackbar(GetSnackBar(

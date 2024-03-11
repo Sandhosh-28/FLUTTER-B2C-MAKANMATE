@@ -24,11 +24,13 @@ class ProductListingController extends GetxController with StateMixin {
   ///GET ALL SUBCATEGORY
   getAllSubCategoryList(String? categoryCode) async {
     isLoading.value = true;
+    change(null, status: RxStatus.loading());
     await getProductByCategoryId(
         categoryId: categoryCode ?? '',
         subCategoryId: '',
         isPagination: false,
         subCategoryL2Name: "");
+    change(null, status: RxStatus.loading());
     await NetworkManager.get(url: HttpUrl.getAllSubCategory, parameters: {
       "OrganizationId": HttpUrl.org,
       "CategoryCode": categoryCode
@@ -37,7 +39,6 @@ class ProductListingController extends GetxController with StateMixin {
       print(categoryCode);
       if (response.apiResponseModel != null &&
           response.apiResponseModel!.status) {
-        change(null, status: RxStatus.success());
         if (response.apiResponseModel!.data != null) {
           List? resJson = response.apiResponseModel!.data!;
           if (resJson != null) {
@@ -59,6 +60,10 @@ class ProductListingController extends GetxController with StateMixin {
               context: Get.context!,
               msg: response.apiResponseModel?.message ?? '');
         }
+      } else {
+        change(null, status: RxStatus.error());
+        PreferenceHelper.getShowSnackBar(
+            msg: "There is no Subcategory", context: Get.context);
       }
     }).catchError((error) {
       change(null, status: RxStatus.error());
@@ -97,8 +102,8 @@ class ProductListingController extends GetxController with StateMixin {
       parameters: {
         "OrganizationId": HttpUrl.org,
         "Category": categoryId ?? "",
-        "SubCategory": subCategoryId ?? "",
-        "SubCategoryL2": subCategoryL2Name ?? "",
+        "SubCategory": (subCategoryId.isNotEmpty) ? subCategoryId : "",
+        "SubCategoryL2": "",
         "pageNo": "$currentPage",
         "pageSize": "10"
       },
@@ -113,7 +118,7 @@ class ProductListingController extends GetxController with StateMixin {
               print("++++++++++++++++++++++++++++++1111111");
               list = resJson.map<ProductModel>((value) {
                 ProductModel _model = ProductModel.fromJson(value);
-                _model.isfavourite = favProductList.any(
+                _model.isFavourite = favProductList.any(
                     (element) => element.productCode == _model.productCode);
                 return _model;
                 // return ProductModel.fromJson(value);

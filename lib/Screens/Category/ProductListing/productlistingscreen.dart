@@ -19,6 +19,7 @@ class ProductListingScreen extends StatefulWidget {
 
 class _ProductListingScreenState extends State<ProductListingScreen> {
   late ProductListingController controller;
+
   // late CategoryModel? categoryModel = CategoryModel();
 
   String? categoryCode;
@@ -30,6 +31,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
     controller = Get.put(ProductListingController());
     categoryCode = Get.arguments as String;
     controller.getAllSubCategoryList(categoryCode);
+
     print(">>>>>>>>>>>><<<<<<<<<<<<<<<<<<");
     print(categoryCode);
     print(">>>>>>>>>>>><<<<<<<<<<<<<<<<<<");
@@ -45,39 +47,53 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
           ),
         );
       }
-      return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-          title: const Text("Category"),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(18.0),
-          physics: const ScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "BENTO SET",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+      return (controller.productList.isNotEmpty)
+          ? Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+                title: const Text("Category"),
+              ),
+              body: SingleChildScrollView(
+                padding: const EdgeInsets.all(18.0),
+                physics: const ScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "BENTO SET",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Obx(() {
+                      return (controller.subCategoryList.value != null)
+                          ? SizedBox(
+                              height: 50,
+                              child: subCategoryList(),
+                            )
+                          : const SizedBox();
+                    }),
+                    (controller.subCategoryList.value != null)
+                        ? const SizedBox(height: 20)
+                        : const SizedBox(),
+                    Obx(() {
+                      return categoryProductGridView();
+                    }),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                child: categoryList(),
+            )
+          : Scaffold(
+              body: Center(
+                child: Image.asset(Assets.noImage),
               ),
-              const SizedBox(height: 20),
-              categoryProductGridView(),
-            ],
-          ),
-        ),
-      );
+            );
     });
   }
 
@@ -85,37 +101,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
   int selectedListIndex = 0;
 
-  List<CategoryList> searchLists = [
-    CategoryList(
-        text: 'Bento set',
-        productGrid: ProductGrid(image: [
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-        ])),
-    CategoryList(
-        text: 'Bento Special Menu',
-        productGrid: ProductGrid(image: [
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-        ])),
-    CategoryList(
-        text: 'Chinese New Year Addons',
-        productGrid: ProductGrid(image: [
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-        ])),
-  ];
-
-  categoryList() {
+  subCategoryList() {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: controller.subCategoryList.value?.length,
@@ -161,22 +147,23 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
   categoryProductGridView() {
     if (controller.productList.isNotEmpty) {
-      return GestureDetector(
-        onTap: () {
-          Get.toNamed(Routes.productDetailScreen);
-        },
-        child: GridView.builder(
-            shrinkWrap: true,
-            itemCount: controller.productList.value?.length,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 300,
-              mainAxisSpacing: 10.0,
-              crossAxisSpacing: 10.0,
-            ),
-            itemBuilder: (context, index) {
-              return Stack(
+      return GridView.builder(
+          shrinkWrap: true,
+          itemCount: controller.productList.length,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisExtent: 300,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 10.0,
+          ),
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.productDetailScreen,
+                    arguments: controller.productList[index].productCode);
+              },
+              child: Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
                   SizedBox(
@@ -184,10 +171,17 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                     width: 300,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        searchLists[selectedListIndex].productGrid.image[index],
-                        fit: BoxFit.fill,
-                      ),
+                      child: controller.productList[index].productImagePath !=
+                              null
+                          ? Image.network(
+                              controller.productList[index].productImagePath ??
+                                  "https://images.pexels.com/photos/327158/pexels-photo-327158.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                              fit: BoxFit.fill,
+                            )
+                          : Image.asset(
+                              Assets.food1,
+                              fit: BoxFit.fill,
+                            ),
                     ),
                   ),
                   Padding(
@@ -253,9 +247,9 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                     ),
                   )
                 ],
-              );
-            }),
-      );
+              ),
+            );
+          });
     }
   }
 }

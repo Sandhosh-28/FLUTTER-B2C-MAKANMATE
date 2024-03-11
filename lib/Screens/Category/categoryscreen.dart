@@ -70,7 +70,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 10,
+        itemCount: controller.categoryList.value?.length,
         // controller.categoryList.value?.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

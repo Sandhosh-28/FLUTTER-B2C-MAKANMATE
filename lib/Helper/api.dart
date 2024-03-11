@@ -16,6 +16,7 @@ class HttpUrl {
   static String banner = '${base}B2CBannerImage/GetAll?';
 
   static String getAllCategory = '${base}Category/GetAll?';
+  // static String getAllCategory = '${base}Category/GetAllWithSubcategory?';
 
   static String getAllSubCategory = '${base}SubCategory/GetbyCategoryCode?';
 
@@ -23,4 +24,6 @@ class HttpUrl {
 
   static String b2CCustomerDeliveryAddressGetAll =
       "${base}B2CCustomerDeliveryAddress/GetAll?";
+
+  static String productGetByCode = '${base}Product/Getbycode?';
 }
