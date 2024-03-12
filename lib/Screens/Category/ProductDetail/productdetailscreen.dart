@@ -31,6 +31,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   ///INCREMENT - DECREMENT FUNCTION
+  ///
 
   int counter = 1;
 
