@@ -5,8 +5,10 @@ import 'package:makkanmate/Const/fonts.dart';
 
 import 'Const/approute.dart';
 import 'Const/colors.dart';
+import 'locator/locator.dart';
 
 void main() {
+  setupDependencies();
   runApp(const MyApp());
 }
 

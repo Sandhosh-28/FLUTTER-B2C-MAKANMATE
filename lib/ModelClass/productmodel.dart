@@ -310,6 +310,18 @@ class ProductModel {
 
   bool isFavourite = false;
 
+  int qtyCount = 0;
+
+  increment() {
+    qtyCount++;
+  }
+
+  decrement() {
+    if (qtyCount > 0) {
+      qtyCount--;
+    }
+  }
+
   Map<String, dynamic> toJson({bool forSharedPreference = false}) {
     final map = <String, dynamic>{};
     map['ProductName'] = productName;

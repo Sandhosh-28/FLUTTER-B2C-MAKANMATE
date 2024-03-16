@@ -5,6 +5,8 @@ import '../../../Helper/api.dart';
 import '../../../Helper/networkclass.dart';
 import '../../../Helper/preferenceHelper.dart';
 import '../../../ModelClass/productmodel.dart';
+import '../../../locator/cart_service.dart';
+import '../../../locator/locator.dart';
 
 class ProductDetailController extends GetxController with StateMixin {
   String? topChoiceRadio;
@@ -14,6 +16,9 @@ class ProductDetailController extends GetxController with StateMixin {
   RxBool isLoading = false.obs;
 
   RxList<ProductModel> productList = <ProductModel>[].obs;
+  RxList<ProductModel> cartAddedProduct = <ProductModel>[].obs;
+
+  final CartService cartService = getIt<CartService>();
 
   ///PRODUCT GET BY CODE
   Future<void> productGetByCode(String? productCode) async {
@@ -56,5 +61,18 @@ class ProductDetailController extends GetxController with StateMixin {
       Get.showSnackbar(PreferenceHelper.getShowSnackBar(
           context: Get.context!, msg: message));
     });
+  }
+
+  Future<void> updateProductCount() async {
+    for (var product in productList) {
+      cartService.cartItems.firstWhereOrNull((element) {
+        if (element.productCode == product.productCode) {
+          product.qtyCount = element.qtyCount;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
   }
 }

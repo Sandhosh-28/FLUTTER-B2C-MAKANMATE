@@ -122,107 +122,174 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              controller.isLoading.value == true
-                  ? const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                      ],
-                    )
-                  : SubmitButton(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                        if (controller.registrationKey.currentState!
-                            .validate()) {
-                          print("Working............");
-                          controller.exitingEmailCheck();
-                        }
-                      },
-                      title: 'Sign up',
-                      isLoading: false,
-                    ),
-              const SizedBox(height: 20),
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(18, 8, 18, 8),
-                  child: Text(
-                      "By Signing up you agree to our Terms Conditions & Privacy Policy.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: MyColors.textGrey,
-                      )),
-                ),
+              CustomTextFormField(
+                controller: controller.unitNoController,
+                inputFormatters: [],
+                hintText: "Unit No",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Unit No";
+                  }
+                },
               ),
               const SizedBox(height: 20),
-              const Center(
-                child: Text("Or",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: MyColors.textGrey,
-                    )),
+              CustomTextFormField(
+                controller: controller.florNoController,
+                inputFormatters: [],
+                hintText: "Flor No",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Address Line 3";
+                  }
+                },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.darkBlue,
-                    disabledBackgroundColor: Colors.transparent,
-                    minimumSize: Size(width(context), 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // <-- Radius
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        Assets.facebookLog,
-                        scale: 3.9,
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        "CONNECT WITH FACEBOOK",
-                        style: TextStyle(
-                            fontFamily: MyFont.myFont,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.white),
-                      ),
-                    ],
-                  )),
+              CustomTextFormField(
+                controller: controller.addressLine1Controller,
+                inputFormatters: [],
+                hintText: "Address Line 1",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Address Line 1";
+                  }
+                },
+              ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.lightBlue,
-                    disabledBackgroundColor: Colors.transparent,
-                    minimumSize: Size(width(context), 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // <-- Radius
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        Assets.google,
-                        scale: 3.9,
-                      ),
-                      const SizedBox(width: 20),
-                      Text(
-                        "CONNECT WITH GOOGLE",
-                        style: TextStyle(
-                            fontFamily: MyFont.myFont,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            color: Colors.white),
-                      ),
-                    ],
-                  )),
+              CustomTextFormField(
+                controller: controller.addressLine2Controller,
+                inputFormatters: [],
+                hintText: "Address Line 2",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Address Line 2";
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              CustomTextFormField(
+                controller: controller.addressLine3Controller,
+                inputFormatters: [],
+                hintText: "Address Line 3",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Address Line 3";
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              CustomTextFormField(
+                controller: controller.postalCodeController,
+                inputFormatters: [],
+                hintText: "Postal Code",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Postal Code";
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              // const Center(
+              //   child: Padding(
+              //     padding: EdgeInsets.fromLTRB(18, 8, 18, 8),
+              //     child: Text(
+              //         "By Signing up you agree to our Terms Conditions & Privacy Policy.",
+              //         textAlign: TextAlign.center,
+              //         style: TextStyle(
+              //           fontSize: 16,
+              //           color: MyColors.textGrey,
+              //         )),
+              //   ),
+              // ),
+              // const SizedBox(height: 20),
+              // const Center(
+              //   child: Text("Or",
+              //       textAlign: TextAlign.center,
+              //       style: TextStyle(
+              //         fontSize: 16,
+              //         color: MyColors.textGrey,
+              //       )),
+              // ),
+              // const SizedBox(height: 20),
+              // ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: MyColors.darkBlue,
+              //       disabledBackgroundColor: Colors.transparent,
+              //       minimumSize: Size(width(context), 50),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(10.0), // <-- Radius
+              //       ),
+              //     ),
+              //     onPressed: () {},
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Image.asset(
+              //           Assets.facebookLog,
+              //           scale: 3.9,
+              //         ),
+              //         const SizedBox(width: 20),
+              //         Text(
+              //           "CONNECT WITH FACEBOOK",
+              //           style: TextStyle(
+              //               fontFamily: MyFont.myFont,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 12,
+              //               color: Colors.white),
+              //         ),
+              //       ],
+              //     )),
+              // const SizedBox(height: 20),
+              // ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: MyColors.lightBlue,
+              //       disabledBackgroundColor: Colors.transparent,
+              //       minimumSize: Size(width(context), 50),
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(10.0), // <-- Radius
+              //       ),
+              //     ),
+              //     onPressed: () {},
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Image.asset(
+              //           Assets.google,
+              //           scale: 3.9,
+              //         ),
+              //         const SizedBox(width: 20),
+              //         Text(
+              //           "CONNECT WITH GOOGLE",
+              //           style: TextStyle(
+              //               fontFamily: MyFont.myFont,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 12,
+              //               color: Colors.white),
+              //         ),
+              //       ],
+              //     )),
             ],
           ),
+        ),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.fromLTRB(20, 8, 20, 20),
+          child: controller.isLoading.value == true
+              ? const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                )
+              : SubmitButton(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    if (controller.registrationKey.currentState!.validate()) {
+                      print("Working............");
+                      controller.exitingEmailCheck();
+                    }
+                  },
+                  title: 'Sign up',
+                  isLoading: false,
+                ),
         ),
       ),
     );

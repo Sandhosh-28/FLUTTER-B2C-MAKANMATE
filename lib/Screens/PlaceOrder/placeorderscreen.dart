@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:makkanmate/Screens/PlaceOrder/placeordercontroller.dart';
 import 'package:makkanmate/Screens/Widget/submitbutton.dart';
 
 import '../../Const/approute.dart';
 import '../../Const/assets.dart';
 import '../../Const/colors.dart';
+import '../../Helper/api.dart';
+import '../../Helper/preferenceHelper.dart';
+import '../../ModelClass/SalesOrder.dart';
+import '../Category/ProductDetail/productedtailcontroller.dart';
 
 class PlaceOrderScreen extends StatefulWidget {
   const PlaceOrderScreen({super.key});
@@ -14,8 +19,76 @@ class PlaceOrderScreen extends StatefulWidget {
 }
 
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
+  late PlaceOrderController controller = PlaceOrderController();
+
+  double qtyTotal = 0;
+  double price = 0;
+  double shippingCharge = 0.00;
+  double grandTotal = 0.00;
+  double taxValue = 0;
+
+  ///CURRENT DATE
+  String currentDate = DateTime.now().toString();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserData();
+    ProductDetailController _cartController =
+        Get.put(ProductDetailController());
+    controller.selectedItems = _cartController.cartAddedProduct.value;
+    controller.cartService.cartChangeStream.listen((_) {});
+  }
+
+  getUserData() async {
+    await PreferenceHelper.getUserData().then((value) {
+      customerId = value?.b2CCustomerId;
+      b2CCustomerName = value?.b2CCustomerName;
+      brachCode = value?.branchCode;
+      emailId = value?.emailId;
+      emailId = value?.mobileNo;
+      postalCode = value?.postalCode;
+      address = value?.addressLine1.toString();
+      countryId = value?.countryId;
+      orgId = value?.orgId.toString();
+    });
+  }
+
+  ///GET CUSTOMER DATA
+  String? customerId;
+  String? orgId;
+  String? countryId;
+  String? address;
+  String? postalCode;
+  String? emailId;
+  String? mobileNo;
+  String? b2CCustomerName;
+  String? brachCode;
+
   @override
   Widget build(BuildContext context) {
+    double grandTotal = 0;
+    double price = 0;
+
+    ///PRICE
+    for (var element in controller.selectedItems) {
+      price += (element.qtyCount * element.sellingCost!);
+      grandTotal = shippingCharge + price;
+
+      ///SHIPPING CHARGERS
+      if (price <= 49) {
+        grandTotal = price + 5;
+        shippingCharge = 5.00;
+      } else if (price >= 50 && price <= 79) {
+        grandTotal = price + 3;
+        shippingCharge = 3.00;
+      } else if (price >= 80) {
+        grandTotal = price;
+        shippingCharge = 0.00;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -32,10 +105,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
           children: [
             orderList(),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "SubTotal",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -43,8 +116,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   ),
                 ),
                 Text(
-                  "\$ 80.90",
-                  style: TextStyle(
+                  '\$ ${price.toStringAsFixed(2) ?? ""}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                     color: MyColors.textGrey,
@@ -53,19 +126,19 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
               ],
             ),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Delivery",
+                const Text(
+                  "Shipping Charge",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                   ),
                 ),
                 Text(
-                  "\$ 00.00",
-                  style: TextStyle(
+                  '\$ ${shippingCharge.toStringAsFixed(2) ?? ""}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                     color: MyColors.textGrey,
@@ -76,10 +149,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "Total",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -87,8 +160,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   ),
                 ),
                 Text(
-                  "\$ 80.90",
-                  style: TextStyle(
+                  '\$ ${grandTotal.toStringAsFixed(2)}',
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                     color: MyColors.textGrey,
@@ -130,11 +203,89 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
         child: SubmitButton(
-            isLoading: false,
-            onTap: () {
-              showPopup(context);
-            },
-            title: "Place Order"),
+          isLoading: false,
+          onTap: () async {
+            if (controller.selectedItems.first.qtyCount != 0) {
+              controller.selectedItems.clear();
+              controller.cartService.cartItems.clear();
+              controller.updateProductCount();
+              Get.offAndToNamed(Routes.userBottomNavBar);
+            } else {
+              controller.salesOrder = SalesOrder(
+                orgId: HttpUrl.org,
+                brachCode: brachCode,
+                orderNo: "",
+                mobileNo: mobileNo,
+                emailId: emailId,
+                orderDate: currentDate,
+                customerId: customerId,
+                customerName: b2CCustomerName,
+                customerAddress: "",
+                postalCode: postalCode,
+                taxCode: 0,
+                taxType: "E",
+                taxPerc: taxValue,
+                currencyCode: "",
+                currencyRate: 1,
+                total: price,
+                billDiscount: 0,
+                billDiscountPerc: 0,
+                subTotal: price,
+                tax: taxValue,
+                netTotal: grandTotal,
+                paymentType: "",
+                paidAmount: grandTotal,
+                remarks: "",
+                isActive: true,
+                createdBy: b2CCustomerName,
+                createdOn: currentDate,
+                changedBy: "admin",
+                changedOn: currentDate,
+                status: 0,
+                customerShipToId: 0,
+                customerShipToAddress: "",
+                latitude: 0,
+                longitude: 0,
+                signatureimage: "",
+                cameraimage: "",
+                orderDateString: currentDate,
+                createdFrom: "B2C",
+                customerEmail: emailId,
+                deliveryAmount: shippingCharge,
+                orderDetail: controller.selectedItems
+                    .map((e) => OrderDetail(
+                          orgId: HttpUrl.org,
+                          orderNo: "",
+                          slNo: 0,
+                          productCode: e.productCode,
+                          productName: e.productName,
+                          qty: e.qtyCount.toInt(),
+                          foc: 0,
+                          price: e.sellingCost,
+                          total: e.qtyCount.toInt() * e.sellingCost!,
+                          itemDiscount: 0,
+                          itemDiscountPerc: 0,
+                          subTotal: e.qtyCount.toInt() * e.sellingCost!,
+                          tax: taxValue,
+                          netTotal: (e.qtyCount.toInt() * e.sellingCost!) +
+                              (taxValue.toInt()),
+                          taxCode: 0,
+                          taxType: "E",
+                          createdBy: "Admin",
+                          taxPerc: 0,
+                          createdOn: currentDate,
+                          changedBy: "Admin",
+                          changedOn: currentDate,
+                          weight: 0,
+                          remarks: "",
+                        ))
+                    .toList(),
+              );
+              controller.salesOrderApi();
+            }
+          },
+          title: "Place Order",
+        ),
       ),
     );
   }
@@ -142,7 +293,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   orderList() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: 3,
+        itemCount: controller.selectedItems.length,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
@@ -157,23 +308,23 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       child: Image.asset(Assets.food1),
                     ),
                     const SizedBox(width: 10),
-                    const Flexible(
+                    Flexible(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 20, bottom: 20),
+                        padding: const EdgeInsets.only(top: 20, bottom: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Cookie Sandwich",
+                              controller.selectedItems[index].productName ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.0,
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Text(
+                            const SizedBox(height: 10),
+                            const Text(
                               "Shortbread, chocolate turtle cookies, and red velvet",
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
@@ -183,12 +334,12 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                 color: MyColors.textGrey,
                               ),
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Text(
-                              "\$ 88.00",
+                              "\$ ${controller.selectedItems[index].sellingCost.toString()}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15.0,
                                 color: MyColors.primaryCustom,
@@ -206,14 +357,14 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                           side: const BorderSide(
                             color: MyColors.grey,
                           )),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 10,
                         ),
                         child: Text(
-                          "45",
-                          style: TextStyle(
+                          controller.selectedItems[index].qtyCount.toString(),
+                          style: const TextStyle(
                             fontWeight: FontWeight.normal,
                             color: MyColors.primaryCustom,
                           ),
@@ -228,49 +379,5 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
             ),
           );
         });
-  }
-
-  showPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          iconPadding: EdgeInsets.zero,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: const Text(
-            "Your Order Placed \nSuccessfully",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: MyColors.black,
-            ),
-          ),
-          content: const Text(
-            "You placed the order successfully. You will get your food within 25 minutes. Thanks for using our services. Enjoy your food :)",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: MyColors.textGrey,
-            ),
-          ),
-          actions: [
-            ButtonBar(alignment: MainAxisAlignment.center, children: [
-              TextButton(
-                onPressed: () {},
-                child: const Text("Keep Browsing"),
-              ),
-            ]),
-          ],
-          icon: SizedBox(
-            height: 150.0,
-            child: Image.asset(
-              Assets.successfully,
-            ),
-          ),
-        );
-      },
-    );
-    Future.delayed(const Duration(seconds: 5), () {
-      Get.offAllNamed(Routes.userBottomNavBar);
-    });
   }
 }

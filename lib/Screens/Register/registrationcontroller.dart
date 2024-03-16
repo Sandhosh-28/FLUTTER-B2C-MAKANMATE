@@ -27,6 +27,12 @@ class RegistrationController extends GetxController with StateMixin {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController addressLine1Controller = TextEditingController();
+  TextEditingController addressLine2Controller = TextEditingController();
+  TextEditingController addressLine3Controller = TextEditingController();
+  TextEditingController unitNoController = TextEditingController();
+  TextEditingController florNoController = TextEditingController();
+  TextEditingController postalCodeController = TextEditingController();
   final pinController = TextEditingController();
 
   RxBool sendOtpLoading = false.obs;

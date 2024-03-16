@@ -7,6 +7,8 @@ import 'package:makkanmate/Screens/Widget/submitbutton.dart';
 
 import '../../../Const/approute.dart';
 import '../../../Const/assets.dart';
+import '../../../Helper/preferenceHelper.dart';
+import '../../../ModelClass/productmodel.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
@@ -20,6 +22,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   String? productCode;
 
+  List<String> savedProduct = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,10 +32,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     productCode = Get.arguments as String;
     print("<<<<<<<<<<<$productCode>>>>>>>>>>");
     controller.productGetByCode(productCode);
+    controller.cartService.cartChangeStream.listen((_) {
+      setState(() {});
+    });
+    initData();
+    controller.updateProductCount();
+  }
+
+  late final List<ProductModel> localData;
+
+  Future<void> initData() async {
+    localData = await PreferenceHelper.getCartData();
+    if (localData != null) {
+      for (int i = 0; i < localData.length; i++) {
+        savedProduct.add(localData[i].productCode!);
+      }
+      controller.cartAddedProduct.clear();
+      controller.cartAddedProduct.addAll(localData);
+    }
   }
 
   ///INCREMENT - DECREMENT FUNCTION
-  ///
 
   int counter = 1;
 
@@ -218,33 +239,108 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
-                                  onPressed: () {
-                                    if (counter > 1) {
-                                      setState(() {
-                                        decrement();
-                                      });
+                                  onPressed: () async {
+                                    ProductModel? selectedProduct =
+                                        controller.productList.first;
+
+                                    setState(() {
+                                      controller.cartService.removeFromCart(
+                                          product: selectedProduct);
+                                      controller.updateProductCount();
+                                    });
+
+                                    if (selectedProduct.qtyCount == 0) {
+                                      if (controller.cartAddedProduct.any(
+                                          (element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode)) {
+                                        var selectedIndex = controller
+                                            .cartAddedProduct
+                                            .indexWhere((element) =>
+                                                element.productCode ==
+                                                selectedProduct.productCode);
+
+                                        controller.cartAddedProduct
+                                            .removeAt(selectedIndex);
+                                        if (controller
+                                            .cartAddedProduct.isEmpty) {
+                                          controller.cartAddedProduct.clear();
+                                        }
+                                      }
                                     }
+                                    // bottomAppBar(index);
+                                    // if (controller.productList[index].qtycount == 0) {
+                                    //   controller.cartAddedProduct.length = 0;
+                                    // }
+                                    await PreferenceHelper.saveCartData(
+                                        controller.cartAddedProduct);
                                   },
                                   icon: Image.asset(Assets.minusButton),
                                   iconSize: 50,
                                 ),
                                 const SizedBox(width: 20),
-                                SizedBox(
-                                  width: width(context) / 8,
-                                  child: TextFormField(
-                                    textAlign: TextAlign.center,
-                                    initialValue: '$counter',
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.all(8.0)),
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return ScaleTransition(
+                                        scale: animation, child: child);
+                                  },
+                                  child: SizedBox(
+                                    width: 20,
+                                    child: Text(
+                                      '${controller.productList.first.qtyCount.toInt()}',
+                                      key: ValueKey<int>(
+                                        controller.productList.first.qtyCount
+                                                .toInt() ??
+                                            0,
+                                      ),
+                                      style: const TextStyle(
+                                        color: MyColors.black,
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 20),
                                 IconButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    ProductModel? selectedProduct =
+                                        controller.productList.value.first;
+                                    if (savedProduct.contains(
+                                        selectedProduct.productCode)) {
+                                      var selectedIndex = controller
+                                          .cartAddedProduct
+                                          .indexWhere((element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode);
+
+                                      controller.cartAddedProduct
+                                          .removeAt(selectedIndex);
+                                      savedProduct
+                                          .remove(selectedProduct.productCode);
+                                    }
                                     setState(() {
-                                      increment();
+                                      controller.cartService
+                                          .addToCart(product: selectedProduct);
+                                      controller.updateProductCount();
                                     });
+
+                                    if (selectedProduct.qtyCount != 0) {
+                                      bool isAlreadyAdded = controller
+                                          .cartAddedProduct
+                                          .any((element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode);
+
+                                      if (!isAlreadyAdded) {
+                                        controller.cartAddedProduct
+                                            .add(selectedProduct);
+                                      }
+                                    }
+                                    await PreferenceHelper.saveCartData(
+                                        controller.cartAddedProduct);
                                   },
                                   icon: Image.asset(Assets.plusButton),
                                   iconSize: 50,
@@ -255,7 +351,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             SubmitButton(
                                 isLoading: false,
                                 onTap: () {
-                                  Get.toNamed(Routes.placeOrderScreen);
+                                  Get.toNamed(Routes.placeOrderScreen,
+                                      arguments: controller.cartAddedProduct);
                                 },
                                 title: "ADD"),
                             const SizedBox(height: 20),

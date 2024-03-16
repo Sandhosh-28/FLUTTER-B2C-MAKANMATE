@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.18.1
   url_launcher: ^6.1.11
   pinput: ^3.0.1
+  get_it: ^7.6.7
 
 
 
