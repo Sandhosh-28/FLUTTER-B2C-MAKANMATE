@@ -24,6 +24,8 @@ class RegistrationController extends GetxController with StateMixin {
 
   final registrationKey = GlobalKey<FormState>();
 
+  String currentDate = DateTime.now().toString();
+
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -106,18 +108,18 @@ class RegistrationController extends GetxController with StateMixin {
       "b2CCustomerName": nameController.text,
       "emailId": emailController.text,
       "password": passwordController.text,
-      "addressLine1": "",
-      "addressLine2": "",
-      "addressLine3": "",
-      "floorNo": "",
-      "unitNo": "",
+      "addressLine1": addressLine1Controller.text,
+      "addressLine2": addressLine2Controller.text,
+      "addressLine3": addressLine3Controller.text,
+      "floorNo": florNoController.text,
+      "unitNo": unitNoController.text,
       "mobileNo": "",
       "countryId": "",
-      "postalCode": "",
+      "postalCode": postalCodeController.text,
       "isActive": b2cCustomerRegModel?.isActive ?? true,
       "isApproved": b2cCustomerRegModel?.isApproved ?? true,
       "createdBy": nameController.text,
-      "createdOn": "2024-01-25T07:31:24.100Z",
+      "createdOn": currentDate,
       "changedBy": "Admin",
       "changedOn": "2024-01-25T07:31:24.101Z",
       "orders": [],

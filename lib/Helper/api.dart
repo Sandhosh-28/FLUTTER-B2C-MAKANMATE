@@ -28,4 +28,6 @@ class HttpUrl {
   static String productGetByCode = '${base}Product/Getbycode?';
 
   static String salesOrderCreate = '${base}B2CCustomerOrder/Create';
+
+  static String addNewAddress = '${base}B2CCustomerDeliveryAddress/Create';
 }

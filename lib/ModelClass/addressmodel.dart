@@ -21,6 +21,7 @@ class AddressModel {
   String? changedOn;
   bool? isCart = false;
 
+  bool isSelected = false;
 
   AddressModel(
       {this.orgId,
