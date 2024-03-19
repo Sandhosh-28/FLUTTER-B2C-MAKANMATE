@@ -40,10 +40,9 @@ class _WalkthroughScreen1State extends State<WalkthroughScreen1>
       begin: 0.0,
       end: 1.0,
     ).animate(_controller);
-
     _controller.forward();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return FadeTransition(

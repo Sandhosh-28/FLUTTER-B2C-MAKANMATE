@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:makkanmate/Const/fonts.dart';
-
 import 'Const/approute.dart';
 import 'Const/colors.dart';
 import 'locator/locator.dart';
