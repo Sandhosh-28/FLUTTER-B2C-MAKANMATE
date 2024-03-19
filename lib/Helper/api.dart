@@ -30,4 +30,9 @@ class HttpUrl {
   static String salesOrderCreate = '${base}B2CCustomerOrder/Create';
 
   static String addNewAddress = '${base}B2CCustomerDeliveryAddress/Create';
+
+  static String changePassword =
+      '${base}B2CCustomerRegister/EditProfilePassword';
+
+  static String editProfile = '${base}B2CCustomerRegister/EditProfile';
 }

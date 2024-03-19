@@ -84,6 +84,33 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 controller: controller.nameController,
                 inputFormatters: [],
                 hintText: "Location Type",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Location Type";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Mobile Number",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 15),
+              CustomTextFormField(
+                controller: controller.phoneNumberController,
+                inputFormatters: [],
+                hintText: "Mobile No",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Mobile Number";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               const SizedBox(height: 20),
               Row(
@@ -105,6 +132,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           controller: controller.unitNoController,
                           inputFormatters: [],
                           hintText: "Unit No",
+                          validator: (value) {
+                            if (value!.isEmpty || value == null) {
+                              return "Please Enter Unit No";
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -125,6 +159,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                           controller: controller.floorNoController,
                           inputFormatters: [],
                           hintText: "Floor No",
+                          validator: (value) {
+                            if (value!.isEmpty || value == null) {
+                              return "Please Enter Floor No";
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -143,6 +184,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 controller: controller.addressLine1Controller,
                 inputFormatters: [],
                 hintText: "Address",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Address Line 1";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               const SizedBox(height: 20),
               const Text(
@@ -156,6 +204,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 controller: controller.addressLine2Controller,
                 inputFormatters: [],
                 hintText: "Address",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Address Line 2";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               const SizedBox(height: 20),
               const Text(
@@ -169,6 +224,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 controller: controller.addressLine3Controller,
                 inputFormatters: [],
                 hintText: "Address",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Address Line 3";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               const SizedBox(height: 20),
               const Text(
@@ -182,6 +244,13 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 controller: controller.postalCodeController,
                 inputFormatters: [],
                 hintText: "Postal Code",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Please Enter Postal Code";
+                  } else {
+                    return null;
+                  }
+                },
               ),
               const SizedBox(height: 20),
             ],

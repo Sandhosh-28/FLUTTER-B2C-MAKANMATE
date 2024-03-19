@@ -37,6 +37,8 @@ class Assets {
   static const String minusButton = "assets/images/Minus.png";
   static const String grocery = "assets/images/grocery.png";
   static const String foodH = "assets/images/foodH.png";
+  static const String forgotPassword = "assets/images/forgotPassword.png";
+  static const String newPassword = "assets/images/newPassword.png";
   static const String noImage = "assets/images/noImage.jpg";
   static const String successfully = "assets/images/successfully.gif";
 }

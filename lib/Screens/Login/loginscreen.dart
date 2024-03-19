@@ -106,7 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
               Center(
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.offAllNamed(Routes.forgotPasswordScreen);
+                    },
                     child: const Text("Forgot Password?",
                         style: TextStyle(
                           fontSize: 16,

@@ -275,8 +275,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     await PreferenceHelper.saveCartData(
                                         controller.cartAddedProduct);
                                   },
-                                  icon: Image.asset(Assets.minusButton),
-                                  iconSize: 50,
+                                  icon: Image.asset(
+                                    Assets.minusButton,
+                                    scale: 1,
+                                  ),
+                                  // iconSize: 30,
                                 ),
                                 const SizedBox(width: 20),
                                 AnimatedSwitcher(
@@ -342,8 +345,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     await PreferenceHelper.saveCartData(
                                         controller.cartAddedProduct);
                                   },
-                                  icon: Image.asset(Assets.plusButton),
-                                  iconSize: 50,
+                                  icon: Image.asset(
+                                    Assets.plusButton,
+                                    scale: 1,
+                                  ),
+                                  // iconSize: 30,
                                 ),
                               ],
                             ),

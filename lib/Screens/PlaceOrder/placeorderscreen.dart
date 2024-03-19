@@ -6,6 +6,7 @@ import 'package:makkanmate/Screens/Widget/submitbutton.dart';
 import '../../Const/approute.dart';
 import '../../Const/assets.dart';
 import '../../Const/colors.dart';
+import '../../Const/fonts.dart';
 import '../../Helper/api.dart';
 import '../../Helper/preferenceHelper.dart';
 import '../../ModelClass/SalesOrder.dart';
@@ -30,6 +31,10 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   ///CURRENT DATE
   String currentDate = DateTime.now().toString();
 
+  int selectedAddressIndex = -1;
+
+  String? sendSalesAddress;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +44,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         Get.put(ProductDetailController());
     controller.selectedItems = _cartController.cartAddedProduct.value;
     controller.cartService.cartChangeStream.listen((_) {});
+    controller.getAddress();
   }
 
   getUserData() async {
@@ -104,6 +110,15 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         child: Column(
           children: [
             orderList(),
+            const SizedBox(height: 20),
+            Obx(() {
+              return SizedBox(
+                height: 200,
+                child: Center(
+                  child: getAddressListing(),
+                ),
+              );
+            }),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,7 +235,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                 orderDate: currentDate,
                 customerId: customerId,
                 customerName: b2CCustomerName,
-                customerAddress: "",
+                customerAddress: sendSalesAddress,
                 postalCode: postalCode,
                 taxCode: 0,
                 taxType: "E",
@@ -379,5 +394,132 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
             ),
           );
         });
+  }
+
+  getAddressListing() {
+    return (controller.addressList.value != null &&
+            controller.addressList.value!.isNotEmpty)
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.addressList.value?.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              final isSelected = index == selectedAddressIndex;
+              final address = controller.addressList.value?[index];
+              return InkWell(
+                onTap: () {
+                  setState(() {
+                    if (isSelected) {
+                      // If the address is already selected, deselect it
+                      selectedAddressIndex = -1;
+                      controller.selectedAddress.clear();
+                    } else {
+                      // If a different address is selected, update the selection
+                      selectedAddressIndex = index;
+                      controller.selectedAddress.clear();
+                      controller.selectedAddress.add(address!);
+                    }
+                  });
+                  sendSalesAddress =
+                      "${controller.selectedAddress.first.addressLine1},${controller.selectedAddress.first.floorNo},${controller.selectedAddress.first.unitNo},${controller.selectedAddress.first.addressLine2},${controller.selectedAddress.first.postalCode}";
+                  print(sendSalesAddress);
+                  print("cartController.selectedAddress.length");
+                  print(controller.selectedAddress.length);
+                  print(controller.selectedAddress.first.addressLine1);
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                      side: BorderSide(
+                          color: isSelected
+                              ? MyColors.mainTheme
+                              : Colors.transparent),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              Assets.addLocation,
+                              scale: 3,
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Shipping address",
+                                  style: TextStyle(
+                                    fontFamily: MyFont.myFont,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: MyColors.primaryCustom,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  "${address?.unitNo}, ${address?.floorNo}, ${address?.addressLine1}, \n${address?.addressLine2}, ${address?.addressLine3}, \n${address?.postalCode}",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: MyFont.myFont,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  "Ph No •  ${controller.addressList.value?[index].phone}, \n",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: MyFont.myFont,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: MyColors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Theme(
+                            //   data: ThemeData(
+                            //     unselectedWidgetColor: MyColors
+                            //         .white, // Change the color of unselected radio buttons
+                            //   ),
+                            //   child: Radio(
+                            //     value: index,
+                            //     groupValue: _selectedItemIndex,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         if (_selectedItemIndex == value) {
+                            //           _selectedItemIndex = null;
+                            //           controller.addressList.value?[index]
+                            //               .isSelected = false;
+                            //         } else {
+                            //           _selectedItemIndex = value;
+                            //           controller.addressList.value?.forEach(
+                            //               (element) =>
+                            //                   element.isSelected = false);
+                            //           controller.addressList.value?[index]
+                            //               .isSelected = true;
+                            //         }
+                            //       });
+                            //     },
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            })
+        : const Center(
+            child: Text(
+            "Add your Delivery Address",
+          ));
   }
 }
