@@ -101,6 +101,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               const SizedBox(height: 20),
               CustomTextFormField(
+                controller: controller.mobileNoController,
+                inputFormatters: [],
+                keyboardType: TextInputType.number,
+                hintText: "Mobile No",
+                validator: (value) {
+                  if (value!.isEmpty || value == null) {
+                    return "Enter Valid Mobile Number";
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
+              CustomTextFormField(
                 controller: controller.passwordController,
                 inputFormatters: [],
                 hintText: "Password",
@@ -122,26 +134,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              CustomTextFormField(
-                controller: controller.unitNoController,
-                inputFormatters: [],
-                hintText: "Unit No",
-                validator: (value) {
-                  if (value!.isEmpty || value == null) {
-                    return "Enter Unit No";
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              CustomTextFormField(
-                controller: controller.florNoController,
-                inputFormatters: [],
-                hintText: "Flor No",
-                validator: (value) {
-                  if (value!.isEmpty || value == null) {
-                    return "Enter Address Line 3";
-                  }
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: width(context) / 2.5,
+                    child: CustomTextFormField(
+                      controller: controller.unitNoController,
+                      inputFormatters: [],
+                      hintText: "Unit No",
+                      validator: (value) {
+                        if (value!.isEmpty || value == null) {
+                          return "Enter Unit No";
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: width(context) / 2.5,
+                    child: CustomTextFormField(
+                      controller: controller.florNoController,
+                      inputFormatters: [],
+                      hintText: "Flor No",
+                      validator: (value) {
+                        if (value!.isEmpty || value == null) {
+                          return "Enter Address Line 3";
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               CustomTextFormField(

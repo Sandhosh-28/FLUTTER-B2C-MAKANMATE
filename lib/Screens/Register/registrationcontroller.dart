@@ -28,6 +28,7 @@ class RegistrationController extends GetxController with StateMixin {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController mobileNoController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController addressLine1Controller = TextEditingController();
   TextEditingController addressLine2Controller = TextEditingController();
@@ -113,7 +114,7 @@ class RegistrationController extends GetxController with StateMixin {
       "addressLine3": addressLine3Controller.text,
       "floorNo": florNoController.text,
       "unitNo": unitNoController.text,
-      "mobileNo": "",
+      "mobileNo": mobileNoController.text,
       "countryId": "",
       "postalCode": postalCodeController.text,
       "isActive": b2cCustomerRegModel?.isActive ?? true,
