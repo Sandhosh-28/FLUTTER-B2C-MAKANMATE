@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../../Const/approute.dart';
 import '../../Const/assets.dart';
 import '../../Const/colors.dart';
 import '../Widget/constructor.dart';
+import 'ordercontroller.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({super.key});
@@ -15,221 +17,311 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+  late OrderController controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controller = Get.put(OrderController());
+    controller.getOrderList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Get.offAllNamed(Routes.userBottomNavBar);
-            },
-            icon: const Icon(Icons.arrow_back_ios_new_outlined)),
-        title: const Text("Your Order"),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(18.0),
-        physics: const ScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "ORDER LIST",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 50,
-              child: orderTypeList(),
-            ),
-            const SizedBox(height: 20),
-            orderList(),
-          ],
+    return GetBuilder<OrderController>(builder: (logic) {
+      if (logic.isLoading.value == true) {
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Get.offAllNamed(Routes.userBottomNavBar);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+          title: const Text("Your Order"),
         ),
-      ),
-    );
+        body: controller.ordersModelList.value != null
+            ? SingleChildScrollView(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  children: [
+                    orderList(),
+                  ],
+                ),
+              )
+            : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(Assets.noImage),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Your Order List is Empty",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+      );
+    });
   }
 
   ///PRODUCT LISTING LISTVIEW & GRIDVIEW BUILDER
 
-  int selectedListIndex = 0;
-
-  List<CategoryList> searchLists = [
-    CategoryList(
-        text: 'Active',
-        productGrid: ProductGrid(image: [
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-        ])),
-    CategoryList(
-        text: 'Cancel',
-        productGrid: ProductGrid(image: [
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-          Assets.food1,
-        ])),
-    CategoryList(
-        text: 'Completed',
-        productGrid: ProductGrid(image: [
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-          Assets.food2,
-        ])),
-  ];
-
-  orderTypeList() {
+  orderList() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: searchLists.length,
-        scrollDirection: Axis.horizontal,
+        itemCount: controller.ordersModelList.value?.length,
+        physics: const ScrollPhysics(),
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedListIndex = index;
-              });
-            },
-            child: Card(
-              color: selectedListIndex == index
-                  ? MyColors.primaryCustom
-                  : MyColors.whiteTextFormField,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: Text(
-                  searchLists[index].text.toUpperCase(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: selectedListIndex == index
-                        ? MyColors.whiteTextFormField
-                        : MyColors.grey,
+          DateTime dateTime = DateFormat("yyyy-MM-dd").parse(
+              controller.ordersModelList.value?[index].orderDate.toString() ??
+                  "");
+          String orderDate = DateFormat("dd-MM-yyyy").format(dateTime);
+          return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Date : ",
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: MyColors.primaryCustom,
+                                      ),
+                                    ),
+                                    Text(
+                                      orderDate,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      Get.toNamed(Routes.orderDetailScreen,
+                                          arguments: controller.ordersModelList
+                                              .value?.first.orderNo);
+                                      print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                                      print(
+                                          "${controller.ordersModelList.value?.first.orderNo}");
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 18,
+                                    ))
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Order Id : ",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: MyColors.primaryCustom,
+                                  ),
+                                ),
+                                Text(
+                                  controller.ordersModelList.value?[index]
+                                          .orderNo ??
+                                      "",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Flexible(
+                                  child: Text(
+                                    "Total Amount",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                      color: MyColors.primaryCustom,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 50),
+                                Flexible(
+                                  child: Text(
+                                    "\$  ${controller.ordersModelList.value?[index].netTotal.toString()}" ??
+                                        "",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
             ),
           );
         });
   }
 
-  orderList() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: searchLists[selectedListIndex].productGrid.image.length,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: SizedBox(
-                        height: 150,
-                        child: Image.asset(
-                          searchLists[selectedListIndex]
-                              .productGrid
-                              .image[index],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    const Flexible(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Cookie Sandwich",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "Shortbread, chocolate turtle cookies, and red velvet",
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 16.0,
-                                color: MyColors.textGrey,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Text(
-                                  "4 Items | 2.5 km",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: MyColors.textGrey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "\$ 88.00",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0,
-                                color: MyColors.primaryCustom,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Card(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: const BorderSide(
-                            color: MyColors.grey,
-                          )),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
-                        ),
-                        child: Text(
-                          "45",
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: MyColors.primaryCustom,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                const Divider(thickness: 1),
-              ],
-            ),
-          );
-        });
-  }
+  // orderList() {
+  //   return ListView.builder(
+  //       shrinkWrap: true,
+  //       itemCount: controller.ordersModelList.value?.length,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       itemBuilder: (context, index) {
+  //         DateTime dateTime = DateFormat("yyyy-MM-dd").parse(
+  //             controller.ordersModelList.value?[index].orderDate.toString() ??
+  //                 "");
+  //         String orderDate = DateFormat("dd-MM-yyyy").format(dateTime);
+  //         return Padding(
+  //           padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+  //           child: Column(
+  //             children: [
+  //               Row(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   ClipRRect(
+  //                     borderRadius: BorderRadius.circular(10.0),
+  //                     child: SizedBox(
+  //                       height: 150,
+  //                       child: Image.asset(
+  //                         Assets.food1,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 10),
+  //                   const Flexible(
+  //                     child: Padding(
+  //                       padding: EdgeInsets.only(top: 10, bottom: 10),
+  //                       child: Column(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           Text(
+  //                             "Cookie Sandwich",
+  //                             maxLines: 1,
+  //                             overflow: TextOverflow.ellipsis,
+  //                             style: TextStyle(
+  //                               fontWeight: FontWeight.bold,
+  //                               fontSize: 16.0,
+  //                             ),
+  //                           ),
+  //                           SizedBox(height: 10),
+  //                           Text(
+  //                             "Shortbread, chocolate turtle cookies, and red velvet",
+  //                             maxLines: 3,
+  //                             overflow: TextOverflow.ellipsis,
+  //                             style: TextStyle(
+  //                               fontWeight: FontWeight.normal,
+  //                               fontSize: 16.0,
+  //                               color: MyColors.textGrey,
+  //                             ),
+  //                           ),
+  //                           SizedBox(height: 10),
+  //                           Row(
+  //                             children: [
+  //                               Text(
+  //                                 "4 Items | 2.5 km",
+  //                                 style: TextStyle(
+  //                                   fontWeight: FontWeight.bold,
+  //                                   color: MyColors.textGrey,
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           SizedBox(height: 10),
+  //                           Text(
+  //                             "\$ 88.00",
+  //                             maxLines: 1,
+  //                             overflow: TextOverflow.ellipsis,
+  //                             style: TextStyle(
+  //                               fontWeight: FontWeight.bold,
+  //                               fontSize: 15.0,
+  //                               color: MyColors.primaryCustom,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 10),
+  //                   Card(
+  //                     elevation: 0,
+  //                     shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(5.0),
+  //                         side: const BorderSide(
+  //                           color: MyColors.grey,
+  //                         )),
+  //                     child: const Padding(
+  //                       padding: EdgeInsets.symmetric(
+  //                         horizontal: 10,
+  //                         vertical: 10,
+  //                       ),
+  //                       child: Text(
+  //                         "45",
+  //                         style: TextStyle(
+  //                           fontWeight: FontWeight.normal,
+  //                           color: MyColors.primaryCustom,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 10),
+  //               const Divider(thickness: 1),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
 
   // categoryProductGridView() {
   //   return GestureDetector(

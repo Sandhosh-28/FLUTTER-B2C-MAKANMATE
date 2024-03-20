@@ -101,11 +101,11 @@ class SalesOrder {
   String? customerName;
   String? customerAddress;
   String? postalCode;
-  double? taxCode;
+  int? taxCode;
   String? taxType;
   double? taxPerc;
   String? currencyCode;
-  int? currencyRate;
+  double? currencyRate;
   double? total;
   double? billDiscount;
   double? billDiscountPerc;
@@ -243,8 +243,8 @@ class OrderDetail {
   double? price;
   int? foc;
   double? total;
-  int? itemDiscount;
-  int? itemDiscountPerc;
+  double? itemDiscount;
+  double? itemDiscountPerc;
   double? subTotal;
   double? tax;
   double? netTotal;
@@ -256,7 +256,7 @@ class OrderDetail {
   String? createdOn;
   String? changedBy;
   String? changedOn;
-  int? weight;
+  double? weight;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

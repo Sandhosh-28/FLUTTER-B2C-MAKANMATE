@@ -42,6 +42,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
             ListTile(
               onTap: () {
+                Get.toNamed(Routes.orderScreen);
+              },
+              leading: Image.asset(
+                Assets.accProfile,
+                scale: 3,
+              ),
+              title: const Text(
+                "Your Orders",
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: const Text(
+                "See your order details here",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: MyColors.textGrey,
+                ),
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios_outlined,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ListTile(
+              onTap: () {
                 Get.toNamed(Routes.editProfileScreen);
               },
               leading: Image.asset(

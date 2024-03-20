@@ -220,83 +220,85 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         child: SubmitButton(
           isLoading: false,
           onTap: () async {
-            if (controller.selectedItems.first.qtyCount != 0) {
-              controller.selectedItems.clear();
-              controller.cartService.cartItems.clear();
-              controller.updateProductCount();
-              Get.offAndToNamed(Routes.userBottomNavBar);
-            } else {
-              controller.salesOrder = SalesOrder(
-                orgId: HttpUrl.org,
-                brachCode: brachCode,
-                orderNo: "",
-                mobileNo: mobileNo,
-                emailId: emailId,
-                orderDate: currentDate,
-                customerId: customerId,
-                customerName: b2CCustomerName,
-                customerAddress: sendSalesAddress,
-                postalCode: postalCode,
-                taxCode: 0,
-                taxType: "E",
-                taxPerc: taxValue,
-                currencyCode: "",
-                currencyRate: 1,
-                total: price,
-                billDiscount: 0,
-                billDiscountPerc: 0,
-                subTotal: price,
-                tax: taxValue,
-                netTotal: grandTotal,
-                paymentType: "",
-                paidAmount: grandTotal,
-                remarks: "",
-                isActive: true,
-                createdBy: b2CCustomerName,
-                createdOn: currentDate,
-                changedBy: "admin",
-                changedOn: currentDate,
-                status: 0,
-                customerShipToId: 0,
-                customerShipToAddress: "",
-                latitude: 0,
-                longitude: 0,
-                signatureimage: "",
-                cameraimage: "",
-                orderDateString: currentDate,
-                createdFrom: "B2C",
-                customerEmail: emailId,
-                deliveryAmount: shippingCharge,
-                orderDetail: controller.selectedItems
-                    .map((e) => OrderDetail(
-                          orgId: HttpUrl.org,
-                          orderNo: "",
-                          slNo: 0,
-                          productCode: e.productCode,
-                          productName: e.productName,
-                          qty: e.qtyCount.toInt(),
-                          foc: 0,
-                          price: e.sellingCost,
-                          total: e.qtyCount.toInt() * e.sellingCost!,
-                          itemDiscount: 0,
-                          itemDiscountPerc: 0,
-                          subTotal: e.qtyCount.toInt() * e.sellingCost!,
-                          tax: taxValue,
-                          netTotal: (e.qtyCount.toInt() * e.sellingCost!) +
-                              (taxValue.toInt()),
-                          taxCode: 0,
-                          taxType: "E",
-                          createdBy: "Admin",
-                          taxPerc: 0,
-                          createdOn: currentDate,
-                          changedBy: "Admin",
-                          changedOn: currentDate,
-                          weight: 0,
-                          remarks: "",
-                        ))
-                    .toList(),
-              );
-              controller.salesOrderApi();
+            if (controller.selectedAddress.isNotEmpty) {
+              if (controller.selectedItems.first.qtyCount == 0) {
+                controller.selectedItems.clear();
+                controller.cartService.cartItems.clear();
+                controller.updateProductCount();
+                Get.offAllNamed(Routes.userBottomNavBar);
+              } else {
+                controller.salesOrder = SalesOrder(
+                  orgId: HttpUrl.org,
+                  brachCode: brachCode,
+                  orderNo: "",
+                  mobileNo: mobileNo,
+                  emailId: emailId,
+                  orderDate: currentDate,
+                  customerId: customerId,
+                  customerName: b2CCustomerName,
+                  customerAddress: sendSalesAddress,
+                  postalCode: postalCode,
+                  taxCode: 0,
+                  taxType: "E",
+                  taxPerc: taxValue,
+                  currencyCode: "",
+                  currencyRate: 1,
+                  total: price,
+                  billDiscount: 0,
+                  billDiscountPerc: 0,
+                  subTotal: price,
+                  tax: taxValue,
+                  netTotal: grandTotal,
+                  paymentType: "",
+                  paidAmount: grandTotal,
+                  remarks: "",
+                  isActive: true,
+                  createdBy: b2CCustomerName,
+                  createdOn: currentDate,
+                  changedBy: "admin",
+                  changedOn: currentDate,
+                  status: 0,
+                  customerShipToId: 0,
+                  customerShipToAddress: "",
+                  latitude: 0,
+                  longitude: 0,
+                  signatureimage: "",
+                  cameraimage: "",
+                  orderDateString: currentDate,
+                  createdFrom: "B2C",
+                  customerEmail: emailId,
+                  deliveryAmount: shippingCharge,
+                  orderDetail: controller.selectedItems
+                      .map((e) => OrderDetail(
+                            orgId: HttpUrl.org,
+                            orderNo: "",
+                            slNo: 0,
+                            productCode: e.productCode,
+                            productName: e.productName,
+                            qty: e.qtyCount.toInt(),
+                            foc: 0,
+                            price: e.sellingCost,
+                            total: e.qtyCount.toInt() * e.sellingCost!,
+                            itemDiscount: 0,
+                            itemDiscountPerc: 0,
+                            subTotal: e.qtyCount.toInt() * e.sellingCost!,
+                            tax: taxValue,
+                            netTotal: (e.qtyCount.toInt() * e.sellingCost!) +
+                                (taxValue.toInt()),
+                            taxCode: 0,
+                            taxType: "E",
+                            createdBy: "Admin",
+                            taxPerc: 0,
+                            createdOn: currentDate,
+                            changedBy: "Admin",
+                            changedOn: currentDate,
+                            weight: 0,
+                            remarks: "",
+                          ))
+                      .toList(),
+                );
+                controller.salesOrderApi();
+              }
             }
           },
           title: "Place Order",

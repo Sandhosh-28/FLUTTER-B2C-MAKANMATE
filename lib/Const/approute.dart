@@ -7,6 +7,8 @@ import '../Screens/ForgotPassword/forgototppasswordscreen.dart';
 import '../Screens/ForgotPassword/forgotpasswordscreen.dart';
 import '../Screens/ForgotPassword/newpasswordscreen.dart';
 import '../Screens/Login/loginscreen.dart';
+import '../Screens/Order/orderdetailscreen.dart';
+import '../Screens/Order/orderscreen.dart';
 import '../Screens/PlaceOrder/placeorderscreen.dart';
 import '../Screens/Profile/AddSocialAccount/addsocialaccountscreen.dart';
 import '../Screens/Profile/Address/addnewaddressscreen.dart';
@@ -44,6 +46,8 @@ class Routes {
   static const String forgotPasswordScreen = "/ForgotPasswordScreen";
   static const String forgotPasswordOTPScreen = "/ForgotPasswordOTPScreen";
   static const String newPasswordScreen = "/NewPasswordScreen";
+  static const String orderScreen = "/OrderScreen";
+  static const String orderDetailScreen = "/OrderDetailScreen";
 }
 
 final pages = [
@@ -93,4 +97,7 @@ final pages = [
       page: () => const ForgotPasswordOTPScreen()),
   GetPage(
       name: Routes.newPasswordScreen, page: () => const NewPasswordScreen()),
+  GetPage(name: Routes.orderScreen, page: () => const OrderScreen()),
+  GetPage(
+      name: Routes.orderDetailScreen, page: () => const OrderDetailScreen()),
 ];

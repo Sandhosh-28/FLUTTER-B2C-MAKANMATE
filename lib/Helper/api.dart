@@ -35,4 +35,9 @@ class HttpUrl {
       '${base}B2CCustomerRegister/EditProfilePassword';
 
   static String editProfile = '${base}B2CCustomerRegister/EditProfile';
+
+  static String customerOrderGetByCode = '${base}B2CCustomerOrder/Getbycode?';
+
+  static String b2cCustomerOrderListing =
+      '${base}B2CCustomerOrder/GetHeaderSearch?';
 }
