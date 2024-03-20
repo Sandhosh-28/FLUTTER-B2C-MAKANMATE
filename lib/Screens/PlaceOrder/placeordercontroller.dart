@@ -10,6 +10,8 @@ import '../../Helper/api.dart';
 import '../../Helper/networkclass.dart';
 import '../../Helper/preferenceHelper.dart';
 import '../../ModelClass/SalesOrder.dart';
+import '../../ModelClass/addressmodel.dart';
+import '../../ModelClass/loginmodel.dart';
 import '../../ModelClass/productmodel.dart';
 import '../../locator/cart_service.dart';
 import '../../locator/locator.dart';
@@ -19,9 +21,15 @@ class PlaceOrderController extends GetxController with StateMixin {
 
   List<ProductModel> selectedItems = [];
 
+  List<AddressModel> selectedAddress = [];
+
   RxBool isLoading = false.obs;
 
+  Rx<List<AddressModel>?> addressList = (null as List<AddressModel>?).obs;
+
   late SalesOrder salesOrder;
+
+  B2cLoginModel? loginUser;
 
   salesOrderApi() async {
     isLoading.value = true;
@@ -43,7 +51,7 @@ class PlaceOrderController extends GetxController with StateMixin {
           Timer(const Duration(seconds: 10), () async {
             cartService.clearCart();
             await PreferenceHelper.removeCartData()
-                .then((value) => Get.offAllNamed(Routes.userBottomNavBar));
+                .then((value) => Get.offAll(Routes.userBottomNavBar));
           });
         } else {
           String? message = apiResponse.apiResponseModel?.message;
@@ -111,5 +119,51 @@ class PlaceOrderController extends GetxController with StateMixin {
         }
       });
     }
+  }
+
+  getAddress() async {
+    isLoading.value = true;
+    loginUser = await PreferenceHelper.getUserData();
+    await NetworkManager.get(
+      url: HttpUrl.b2CCustomerDeliveryAddressGetAll,
+      parameters: {
+        "OrganizationId": HttpUrl.org,
+        "CustomerId": loginUser?.b2CCustomerId
+      },
+    ).then((response) {
+      isLoading.value = false;
+      if (response.apiResponseModel != null &&
+          response.apiResponseModel!.status) {
+        if (response.apiResponseModel!.data != null) {
+          List? resJson = response.apiResponseModel!.data!;
+          if (resJson != null) {
+            addressList.value = (response.apiResponseModel!.data as List)
+                .map((e) => AddressModel.fromJson(e))
+                .toList();
+            change(addressList.value);
+          }
+          change(null, status: RxStatus.success());
+        } else {
+          change(null, status: RxStatus.error());
+          PreferenceHelper.getShowSnackBar(
+            msg: response.apiResponseModel?.message,
+          );
+        }
+      } else {
+        addressList.value?.length = 0;
+        change(null, status: RxStatus.success());
+        print("addressList.value?.length");
+        print(addressList.value?.length);
+      }
+    }).catchError((error) {
+      change(null, status: RxStatus.error());
+      Get.showSnackbar(
+        PreferenceHelper.getShowSnackBar(
+          msg: error.toString(),
+        ),
+      );
+    });
+    print("addressList.value?.length");
+    print(addressList.value?.length);
   }
 }

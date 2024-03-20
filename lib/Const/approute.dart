@@ -3,7 +3,12 @@ import 'package:get/get.dart';
 import '../Screens/Category/ProductDetail/productdetailscreen.dart';
 import '../Screens/Category/ProductListing/productlistingscreen.dart';
 import '../Screens/Dashboard/dashboardscreen.dart';
+import '../Screens/ForgotPassword/forgototppasswordscreen.dart';
+import '../Screens/ForgotPassword/forgotpasswordscreen.dart';
+import '../Screens/ForgotPassword/newpasswordscreen.dart';
 import '../Screens/Login/loginscreen.dart';
+import '../Screens/Order/orderdetailscreen.dart';
+import '../Screens/Order/orderscreen.dart';
 import '../Screens/PlaceOrder/placeorderscreen.dart';
 import '../Screens/Profile/AddSocialAccount/addsocialaccountscreen.dart';
 import '../Screens/Profile/Address/addnewaddressscreen.dart';
@@ -38,6 +43,11 @@ class Routes {
   static const String productDetailScreen = "/ProductDetailScreen";
   static const String placeOrderScreen = "/PlaceOrderScreen";
   static const String oTPScreen = "/OTPScreen";
+  static const String forgotPasswordScreen = "/ForgotPasswordScreen";
+  static const String forgotPasswordOTPScreen = "/ForgotPasswordOTPScreen";
+  static const String newPasswordScreen = "/NewPasswordScreen";
+  static const String orderScreen = "/OrderScreen";
+  static const String orderDetailScreen = "/OrderDetailScreen";
 }
 
 final pages = [
@@ -79,4 +89,15 @@ final pages = [
       page: () => const ProductListingScreen()),
   GetPage(name: Routes.placeOrderScreen, page: () => const PlaceOrderScreen()),
   GetPage(name: Routes.oTPScreen, page: () => const OTPScreen()),
+  GetPage(
+      name: Routes.forgotPasswordScreen,
+      page: () => const ForgotPasswordScreen()),
+  GetPage(
+      name: Routes.forgotPasswordOTPScreen,
+      page: () => const ForgotPasswordOTPScreen()),
+  GetPage(
+      name: Routes.newPasswordScreen, page: () => const NewPasswordScreen()),
+  GetPage(name: Routes.orderScreen, page: () => const OrderScreen()),
+  GetPage(
+      name: Routes.orderDetailScreen, page: () => const OrderDetailScreen()),
 ];
