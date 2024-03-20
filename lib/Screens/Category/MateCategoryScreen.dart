@@ -10,7 +10,6 @@ import '../../../ModelClass/productmodel.dart';
 import 'ProductDetail/productedtailcontroller.dart';
 import 'categorycontroller.dart';
 
-
 class MateCategoryScreen extends StatefulWidget {
   MateCategoryScreen({super.key});
 
@@ -49,7 +48,6 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryListController>(builder: (logic) {
@@ -63,16 +61,13 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: MyColors.mainTheme,
           leading: IconButton(
               onPressed: () {
                 Get.offAllNamed(Routes.userBottomNavBar);
               },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,)),
-          title: const Text("Category",style: TextStyle(color: MyColors.whiteTextFormField),),
-          actions: [
-            buildAppBarCartButton()
-          ],
+              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+          title: const Text("Category"),
+          actions: [buildAppBarCartButton()],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(18.0),
@@ -110,7 +105,10 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
           return GestureDetector(
             onTap: () {
               // Get.toNamed(Routes.productListingScreen, arguments: controller.categoryList.value?[index].code ?? "");
-              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : true, "categoryCode" : controller.categoryList.value?[index].code ?? ""} );
+              Get.toNamed(Routes.productListingScreen, arguments: {
+                "isMate": true,
+                "categoryCode": controller.categoryList.value?[index].code ?? ""
+              });
               print("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>");
               print(controller.categoryList.value?[index].code);
             },
@@ -121,35 +119,36 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20.0),
                   child:
-                  // Image.asset(
-                  //   Assets.food,
-                  //   fit: BoxFit.fill,
-                  // ),
+                      // Image.asset(
+                      //   Assets.food,
+                      //   fit: BoxFit.fill,
+                      // ),
 
-                  ///Dynamic Changes
-                  (controller.categoryList.value?[index]
-                      .iconImageFilePath !=
-                      null)
-                      ? ("${controller.categoryList.value?[index].iconImageFilePath}"
-                      .isNotEmpty)
-                      ? Image.network(
-                    alignment: Alignment.center,
-                    controller.categoryList.value?[index]
-                        .iconImageFilePath ??
-                        "",
-                    fit: BoxFit.fill,
-                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                      return Image.asset(
-                        Assets.food,
-                        fit: BoxFit.fill,
-                      ); //isplay error message
-                    },
-                  )
-                      : Image.asset(
-                    Assets.food,
-                    fit: BoxFit.fill,
-                  )
-                      : const Icon(Icons.error),
+                      ///Dynamic Changes
+                      (controller.categoryList.value?[index]
+                                  .iconImageFilePath !=
+                              null)
+                          ? ("${controller.categoryList.value?[index].iconImageFilePath}"
+                                  .isNotEmpty)
+                              ? Image.network(
+                                  alignment: Alignment.center,
+                                  controller.categoryList.value?[index]
+                                          .iconImageFilePath ??
+                                      "",
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    return Image.asset(
+                                      Assets.food,
+                                      fit: BoxFit.fill,
+                                    ); //isplay error message
+                                  },
+                                )
+                              : Image.asset(
+                                  Assets.food,
+                                  fit: BoxFit.fill,
+                                )
+                          : const Icon(Icons.error),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -180,14 +179,15 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
         });
   }
 
-
   buildAppBarCartButton() {
     return Obx(() {
       return GestureDetector(
         onTap: () async {
           if (productDetailController.cartAddedProduct.isNotEmpty) {
-            Get.toNamed(Routes.placeOrderScreen,
-                arguments:{"isMate" : true, "Products" : productDetailController.cartAddedProduct})
+            Get.toNamed(Routes.placeOrderScreen, arguments: {
+              "isMate": true,
+              "Products": productDetailController.cartAddedProduct
+            })
                 // arguments: productDetailController.cartAddedProduct)
                 ?.then((value) {
               if (value == true) {
@@ -236,7 +236,8 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
                         border: Border.all(color: Colors.white, width: 1)),
                     child: Center(
                       child: Text(
-                        productDetailController.cartAddedProduct.length.toString(),
+                        productDetailController.cartAddedProduct.length
+                            .toString(),
                         style: const TextStyle(
                           fontSize: 10,
                           color: MyColors.whiteTextFormField,

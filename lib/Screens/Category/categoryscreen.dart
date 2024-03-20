@@ -11,7 +11,7 @@ import 'ProductDetail/productedtailcontroller.dart';
 import 'categorycontroller.dart';
 
 class CategoryScreen extends StatefulWidget {
-   CategoryScreen({super.key});
+  CategoryScreen({super.key});
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -48,7 +48,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CategoryListController>(builder: (logic) {
@@ -62,16 +61,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: MyColors.mainTheme,
           leading: IconButton(
               onPressed: () {
                 Get.offAllNamed(Routes.userBottomNavBar);
               },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,)),
-          title: const Text("Category",style: TextStyle(color: MyColors.whiteTextFormField),),
-          actions: [
-            buildAppBarCartButton()
-          ],
+              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+          title: const Text("Category"),
+          actions: [buildAppBarCartButton()],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(18.0),
@@ -109,7 +105,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
           return GestureDetector(
             onTap: () {
               // Get.toNamed(Routes.productListingScreen, arguments: controller.categoryList.value?[index].code ?? "");
-              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : false, "categoryCode" : controller.categoryList.value?[index].code ?? ""} );
+              Get.toNamed(Routes.productListingScreen, arguments: {
+                "isMate": false,
+                "categoryCode": controller.categoryList.value?[index].code ?? ""
+              });
               print("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>");
               print(controller.categoryList.value?[index].code);
             },
@@ -137,12 +136,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           .iconImageFilePath ??
                                       "",
                                   fit: BoxFit.fill,
-                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                          return Image.asset(
-                            Assets.food,
-                            fit: BoxFit.fill,
-                          ); //isplay error message
-                        },
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    return Image.asset(
+                                      Assets.food,
+                                      fit: BoxFit.fill,
+                                    ); //isplay error message
+                                  },
                                 )
                               : Image.asset(
                                   Assets.food,
@@ -179,7 +179,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
         });
   }
 
-
   buildAppBarCartButton() {
     return Obx(() {
       return GestureDetector(
@@ -187,8 +186,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
           if (productDetailController.mateAddedProduct.isNotEmpty) {
             Get.toNamed(Routes.placeOrderScreen,
                 // arguments: productDetailController.mateAddedProduct)
-                arguments:{"isMate" : false, "Products" : productDetailController.mateAddedProduct})
-                ?.then((value) {
+                arguments: {
+                  "isMate": false,
+                  "Products": productDetailController.mateAddedProduct
+                })?.then((value) {
               if (value == true) {
                 initData();
               }
@@ -235,7 +236,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         border: Border.all(color: Colors.white, width: 1)),
                     child: Center(
                       child: Text(
-                        productDetailController.mateAddedProduct.length.toString(),
+                        productDetailController.mateAddedProduct.length
+                            .toString(),
                         style: const TextStyle(
                           fontSize: 10,
                           color: MyColors.whiteTextFormField,

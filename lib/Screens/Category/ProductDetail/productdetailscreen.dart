@@ -34,7 +34,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     checking = arguments["isMate"] as bool;
     productCode = arguments['productCode'] as String;
     print("<<<<<<<<$checking>>>>>>>$productCode");
-    controller.productGetByCode(productCode,checking);
+    controller.productGetByCode(productCode, checking);
     if (checking == true) {
       controller.cartService.cartChangeStream.listen((_) {
         setState(() {});
@@ -52,7 +52,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late final List<ProductModel> localData;
 
   Future<void> initData() async {
-    if (checking == true){
+    if (checking == true) {
       localData = await PreferenceHelper.getCartData();
       if (localData != null) {
         for (int i = 0; i < localData.length; i++) {
@@ -73,7 +73,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         controller.mateAddedProduct.addAll(localData);
       }
     }
-
   }
 
   @override
@@ -91,7 +90,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              backgroundColor: MyColors.mainTheme,
               expandedHeight: 280,
               pinned: true,
               automaticallyImplyLeading: false,
@@ -99,18 +97,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 onPressed: () {
                   Get.back();
                 },
-                icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,),
+                icon: const Icon(Icons.arrow_back_ios_new_outlined),
               ),
-              title: const Text("Product Detail",style: TextStyle(color: MyColors.whiteTextFormField),),
+              title: const Text("Product Detail"),
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.asset(
                   Assets.banner,
                   fit: BoxFit.fill,
                 ),
               ),
-              actions: [
-                buildAppBarCartButton()
-              ],
+              actions: [buildAppBarCartButton()],
             ),
             SliverToBoxAdapter(
               child: SingleChildScrollView(
@@ -143,8 +139,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                               const SizedBox(width: 20),
                               ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text("Review"))
+                                  onPressed: () {}, child: const Text("Review"))
                             ],
                           ),
                           const SizedBox(height: 10),
@@ -246,153 +241,36 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 10),
                           //ADD Button
                           if (checking == true)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-
-                                  ProductModel? selectedProduct =
-                                      controller.productList.first;
-
-                                  setState(() {
-                                    controller.cartService.removeFromCart(
-                                        product: selectedProduct);
-                                    controller.updateProductCount();
-                                  });
-
-                                  if (selectedProduct.qtyCount == 0) {
-                                    if (controller.cartAddedProduct.any(
-                                        (element) =>
-                                            element.productCode ==
-                                            selectedProduct.productCode)) {
-                                      var selectedIndex = controller
-                                          .cartAddedProduct
-                                          .indexWhere((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
-
-                                      controller.cartAddedProduct
-                                          .removeAt(selectedIndex);
-                                      if (controller
-                                          .cartAddedProduct.isEmpty) {
-                                        controller.cartAddedProduct.clear();
-                                      }
-                                    }
-                                  }
-                                  // bottomAppBar(index);
-                                  // if (controller.productList[index].qtycount == 0) {
-                                  //   controller.cartAddedProduct.length = 0;
-                                  // }
-                                  await PreferenceHelper.saveCartData(controller.cartAddedProduct);
-                                },
-                                icon: Image.asset(Assets.minusButton,
-                                  scale: 4,
-                                ),
-                                // iconSize: 50,
-                              ),
-                              const SizedBox(width: 20),
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 300),
-                                transitionBuilder: (Widget child,
-                                    Animation<double> animation) {
-                                  return ScaleTransition(
-                                      scale: animation, child: child);
-                                },
-                                child: SizedBox(
-                                  width: 20,
-                                  child: Text(
-                                    '${controller.productList.first.qtyCount.toInt()}',
-                                    key: ValueKey<int>(
-                                      controller.productList.first.qtyCount
-                                              .toInt() ??
-                                          0,
-                                    ),
-                                    style: const TextStyle(
-                                      color: MyColors.black,
-                                      fontSize: 16,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              IconButton(
-                                onPressed: () async {
-                                  ProductModel? selectedProduct =
-                                      controller.productList.value.first;
-                                  if (savedProduct.contains(
-                                      selectedProduct.productCode)) {
-                                    var selectedIndex = controller
-                                        .cartAddedProduct
-                                        .indexWhere((element) =>
-                                            element.productCode ==
-                                            selectedProduct.productCode);
-
-                                    controller.cartAddedProduct
-                                        .removeAt(selectedIndex);
-                                    savedProduct
-                                        .remove(selectedProduct.productCode);
-                                  }
-                                  setState(() {
-                                    controller.cartService
-                                        .addToCart(product: selectedProduct);
-                                    controller.updateProductCount();
-                                  });
-
-                                  if (selectedProduct.qtyCount != 0) {
-                                    bool isAlreadyAdded = controller
-                                        .cartAddedProduct
-                                        .any((element) =>
-                                            element.productCode ==
-                                            selectedProduct.productCode);
-
-                                    if (!isAlreadyAdded) {
-                                      controller.cartAddedProduct
-                                          .add(selectedProduct);
-                                    }
-                                  }
-                                  await PreferenceHelper.saveCartData(
-                                      controller.cartAddedProduct);
-                                },
-                                icon: Image.asset(Assets.plusButton,     scale: 4,
-                                ),
-                                // iconSize: 50,
-                              ),
-                            ],
-                          ),
-                          if (checking == false)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
                                   onPressed: () async {
-
                                     ProductModel? selectedProduct =
                                         controller.productList.first;
 
                                     setState(() {
-                                      controller.cartService.removeFromCart1(
+                                      controller.cartService.removeFromCart(
                                           product: selectedProduct);
-                                      controller.updateProductCount1();
+                                      controller.updateProductCount();
                                     });
 
                                     if (selectedProduct.qtyCount == 0) {
-                                      if (controller.mateAddedProduct.any(
-                                              (element) =>
-                                          element.productCode ==
+                                      if (controller.cartAddedProduct.any(
+                                          (element) =>
+                                              element.productCode ==
                                               selectedProduct.productCode)) {
                                         var selectedIndex = controller
-                                            .mateAddedProduct
+                                            .cartAddedProduct
                                             .indexWhere((element) =>
-                                        element.productCode ==
-                                            selectedProduct.productCode);
+                                                element.productCode ==
+                                                selectedProduct.productCode);
 
-                                        controller.mateAddedProduct
+                                        controller.cartAddedProduct
                                             .removeAt(selectedIndex);
-                                        if (controller.mateAddedProduct.isEmpty) {
-                                          controller.mateAddedProduct.clear();
-
+                                        if (controller
+                                            .cartAddedProduct.isEmpty) {
+                                          controller.cartAddedProduct.clear();
                                         }
                                       }
                                     }
@@ -400,9 +278,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     // if (controller.productList[index].qtycount == 0) {
                                     //   controller.cartAddedProduct.length = 0;
                                     // }
-                                    await PreferenceHelper.savemateData(controller.mateAddedProduct);
+                                    await PreferenceHelper.saveCartData(
+                                        controller.cartAddedProduct);
                                   },
-                                  icon: Image.asset(Assets.minusButton,
+                                  icon: Image.asset(
+                                    Assets.minusButton,
                                     scale: 4,
                                   ),
                                   // iconSize: 50,
@@ -421,7 +301,126 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       '${controller.productList.first.qtyCount.toInt()}',
                                       key: ValueKey<int>(
                                         controller.productList.first.qtyCount
-                                            .toInt() ??
+                                                .toInt() ??
+                                            0,
+                                      ),
+                                      style: const TextStyle(
+                                        color: MyColors.black,
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                                IconButton(
+                                  onPressed: () async {
+                                    ProductModel? selectedProduct =
+                                        controller.productList.value.first;
+                                    if (savedProduct.contains(
+                                        selectedProduct.productCode)) {
+                                      var selectedIndex = controller
+                                          .cartAddedProduct
+                                          .indexWhere((element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode);
+
+                                      controller.cartAddedProduct
+                                          .removeAt(selectedIndex);
+                                      savedProduct
+                                          .remove(selectedProduct.productCode);
+                                    }
+                                    setState(() {
+                                      controller.cartService
+                                          .addToCart(product: selectedProduct);
+                                      controller.updateProductCount();
+                                    });
+
+                                    if (selectedProduct.qtyCount != 0) {
+                                      bool isAlreadyAdded = controller
+                                          .cartAddedProduct
+                                          .any((element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode);
+
+                                      if (!isAlreadyAdded) {
+                                        controller.cartAddedProduct
+                                            .add(selectedProduct);
+                                      }
+                                    }
+                                    await PreferenceHelper.saveCartData(
+                                        controller.cartAddedProduct);
+                                  },
+                                  icon: Image.asset(
+                                    Assets.plusButton,
+                                    scale: 4,
+                                  ),
+                                  // iconSize: 50,
+                                ),
+                              ],
+                            ),
+                          if (checking == false)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () async {
+                                    ProductModel? selectedProduct =
+                                        controller.productList.first;
+
+                                    setState(() {
+                                      controller.cartService.removeFromCart1(
+                                          product: selectedProduct);
+                                      controller.updateProductCount1();
+                                    });
+
+                                    if (selectedProduct.qtyCount == 0) {
+                                      if (controller.mateAddedProduct.any(
+                                          (element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode)) {
+                                        var selectedIndex = controller
+                                            .mateAddedProduct
+                                            .indexWhere((element) =>
+                                                element.productCode ==
+                                                selectedProduct.productCode);
+
+                                        controller.mateAddedProduct
+                                            .removeAt(selectedIndex);
+                                        if (controller
+                                            .mateAddedProduct.isEmpty) {
+                                          controller.mateAddedProduct.clear();
+                                        }
+                                      }
+                                    }
+                                    // bottomAppBar(index);
+                                    // if (controller.productList[index].qtycount == 0) {
+                                    //   controller.cartAddedProduct.length = 0;
+                                    // }
+                                    await PreferenceHelper.savemateData(
+                                        controller.mateAddedProduct);
+                                  },
+                                  icon: Image.asset(
+                                    Assets.minusButton,
+                                    scale: 4,
+                                  ),
+                                  // iconSize: 50,
+                                ),
+                                const SizedBox(width: 20),
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return ScaleTransition(
+                                        scale: animation, child: child);
+                                  },
+                                  child: SizedBox(
+                                    width: 20,
+                                    child: Text(
+                                      '${controller.productList.first.qtyCount.toInt()}',
+                                      key: ValueKey<int>(
+                                        controller.productList.first.qtyCount
+                                                .toInt() ??
                                             0,
                                       ),
                                       style: const TextStyle(
@@ -444,8 +443,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       var selectedIndex = controller
                                           .mateAddedProduct
                                           .indexWhere((element) =>
-                                      element.productCode ==
-                                          selectedProduct.productCode);
+                                              element.productCode ==
+                                              selectedProduct.productCode);
 
                                       controller.mateAddedProduct
                                           .removeAt(selectedIndex);
@@ -462,8 +461,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       bool isAlreadyAdded = controller
                                           .mateAddedProduct
                                           .any((element) =>
-                                      element.productCode ==
-                                          selectedProduct.productCode);
+                                              element.productCode ==
+                                              selectedProduct.productCode);
 
                                       if (!isAlreadyAdded) {
                                         controller.mateAddedProduct
@@ -474,24 +473,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     print(controller.mateAddedProduct.length);
                                     await PreferenceHelper.savemateData(
                                         controller.mateAddedProduct);
-                                    var data = await PreferenceHelper.getmateData();
+                                    var data =
+                                        await PreferenceHelper.getmateData();
                                     print("data.length");
                                     print(data.length);
                                   },
-                                  icon: Image.asset(Assets.plusButton,     scale: 4,
+                                  icon: Image.asset(
+                                    Assets.plusButton,
+                                    scale: 4,
                                   ),
                                   // iconSize: 50,
                                 ),
                               ],
                             ),
-                          const SizedBox(height: 10),
-                          SubmitButton(
-                              isLoading: false,
-                              onTap: () {
-                                Get.toNamed(Routes.placeOrderScreen,
-                                    arguments: controller.cartAddedProduct);
-                              },
-                              title: "ADD"),
+
                           const SizedBox(height: 20),
                           const Text(
                             "Featured Items",
@@ -793,9 +788,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         onTap: () async {
           if (checking == true) {
             if (controller.cartAddedProduct.isNotEmpty) {
-              Get.toNamed(Routes.placeOrderScreen,
-                  arguments:{"isMate" : true, "Products" : controller.cartAddedProduct})
-              // arguments: controller.cartAddedProduct)
+              Get.toNamed(Routes.placeOrderScreen, arguments: {
+                "isMate": true,
+                "Products": controller.cartAddedProduct
+              })
+                  // arguments: controller.cartAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();
@@ -821,9 +818,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
           if (checking == false) {
             if (controller.mateAddedProduct.isNotEmpty) {
-              Get.toNamed(Routes.placeOrderScreen,
-                  arguments:{"isMate" : false, "Products" : controller.mateAddedProduct})
-              // arguments: controller.mateAddedProduct)
+              Get.toNamed(Routes.placeOrderScreen, arguments: {
+                "isMate": false,
+                "Products": controller.mateAddedProduct
+              })
+                  // arguments: controller.mateAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();
@@ -846,8 +845,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               );
             }
           }
-
-
         },
         child: Padding(
           padding: const EdgeInsets.only(right: 11.0),
@@ -858,7 +855,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 padding: EdgeInsets.only(right: 11.0),
                 child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: MyColors.whiteTextFormField,
+                  color: MyColors.black,
                 ),
               ),
               if (checking == true && controller.cartAddedProduct.isNotEmpty)
