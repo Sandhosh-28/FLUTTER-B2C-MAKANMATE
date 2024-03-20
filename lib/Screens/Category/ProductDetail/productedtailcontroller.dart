@@ -18,13 +18,15 @@ class ProductDetailController extends GetxController with StateMixin {
   RxList<ProductModel> productList = <ProductModel>[].obs;
   RxList<ProductModel> cartAddedProduct = <ProductModel>[].obs;
 
+  RxList<ProductModel> mateAddedProduct = <ProductModel>[].obs;
+
   final CartService cartService = getIt<CartService>();
 
+
   ///PRODUCT GET BY CODE
-  Future<void> productGetByCode(String? productCode) async {
+  Future<void> productGetByCode(String? productCode,bool? isMate) async {
     isLoading.value = true;
     change(null, status: RxStatus.loading());
-
     await NetworkManager.get(
       url: HttpUrl.productGetByCode,
       parameters: {
@@ -43,6 +45,12 @@ class ProductDetailController extends GetxController with StateMixin {
               return ProductModel.fromJson(value);
             }).toList();
             productList.value = list;
+            if (isMate == true) {
+              updateProductCount();
+            }
+            if (isMate == false) {
+              updateProductCount1();
+            }
             change(null, status: RxStatus.success());
           } else {
             print("productList.length");
@@ -75,4 +83,19 @@ class ProductDetailController extends GetxController with StateMixin {
       });
     }
   }
+
+
+  Future<void> updateProductCount1() async {
+    for (var product in productList) {
+      cartService.martItems.firstWhereOrNull((element) {
+        if (element.productCode == product.productCode) {
+          product.qtyCount = element.qtyCount;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+  }
+
 }

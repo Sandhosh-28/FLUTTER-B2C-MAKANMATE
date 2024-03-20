@@ -30,15 +30,26 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   ///CURRENT DATE
   String currentDate = DateTime.now().toString();
 
+  bool? checking;
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserData();
-    ProductDetailController _cartController =
-        Get.put(ProductDetailController());
-    controller.selectedItems = _cartController.cartAddedProduct.value;
-    controller.cartService.cartChangeStream.listen((_) {});
+    final dynamic arguments = Get.arguments;
+    checking = arguments["isMate"] as bool;
+    ProductDetailController _cartController = Get.put(ProductDetailController());
+    if (checking  == true) {
+      controller.selectedItems = _cartController.cartAddedProduct.value;
+      controller.cartService.cartChangeStream.listen((_) {});
+    }
+
+    if (checking == false) {
+      controller.selectedItems = _cartController.mateAddedProduct.value;
+      controller.cartService.mateChangeStream.listen((_) {});
+    }
   }
 
   getUserData() async {

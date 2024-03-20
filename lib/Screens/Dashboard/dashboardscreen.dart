@@ -39,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: MyColors.mainTheme,
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(Assets.logo),
@@ -50,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 "Welcome To",
                 style: TextStyle(
                   fontSize: 15,
-                  color: MyColors.textGrey,
+                  color: MyColors.whiteTextFormField,
                 ),
               ),
               SizedBox(height: 5),
@@ -59,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 17,
-                  color: MyColors.black,
+                  color: MyColors.whiteTextFormField,
                 ),
               ),
             ],
@@ -69,20 +70,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onPressed: () {},
                 icon: const Icon(
                   Icons.search,
-                  color: MyColors.grey,
+                  color: MyColors.whiteTextFormField,
                 )),
             IconButton(
                 onPressed: () {},
                 icon: const Icon(
                   Icons.notifications_none,
-                  color: MyColors.grey,
+                  color: MyColors.whiteTextFormField,
                 )),
-            IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.shopping_cart_outlined,
-                  color: MyColors.grey,
-                )),
+            // IconButton(
+            //     onPressed: () {},
+            //     icon: const Icon(
+            //       Icons.shopping_cart_outlined,
+            //       color: MyColors.whiteTextFormField,
+            //     )),
           ],
         ),
         body: SingleChildScrollView(

@@ -6,6 +6,8 @@ import '../../../Helper/preferenceHelper.dart';
 import '../../../ModelClass/getfavproductlistmodel.dart';
 import '../../../ModelClass/productmodel.dart';
 import '../../../ModelClass/subcategorymodel.dart';
+import '../../../locator/cart_service.dart';
+import '../../../locator/locator.dart';
 
 class ProductListingController extends GetxController with StateMixin {
   RxBool isLoading = false.obs;
@@ -16,6 +18,10 @@ class ProductListingController extends GetxController with StateMixin {
   RxList<ProductModel> productList = <ProductModel>[].obs;
 
   List<GetFavProductListModel> favProductList = [];
+
+
+  final CartService cartService = getIt<CartService>();
+
 
   String categoryName = "";
   int currentPage = 1;
@@ -164,4 +170,19 @@ class ProductListingController extends GetxController with StateMixin {
           context: Get.context!, msg: error.toString());
     });
   }
+
+  Future<void> updateProductCount() async {
+    for (var product in productList) {
+      cartService.cartItems.firstWhereOrNull((element) {
+        if (element.productCode == product.productCode) {
+          product.qtyCount = element.qtyCount;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+  }
+
+
 }

@@ -6,11 +6,19 @@ import '../../Helper/api.dart';
 import '../../Helper/networkclass.dart';
 import '../../Helper/preferenceHelper.dart';
 import '../../ModelClass/categorymodel.dart';
+import '../../ModelClass/productmodel.dart';
+import '../../locator/cart_service.dart';
+import '../../locator/locator.dart';
 
 class CategoryListController extends GetxController with StateMixin {
   RxBool isLoadings = false.obs;
 
   Rx<List<CategoryModel>?> categoryList = (null as List<CategoryModel>?).obs;
+
+
+  // RxList<ProductModel> cartAddedProduct = <ProductModel>[].obs;
+  //
+  // final CartService cartService = getIt<CartService>();
 
   getAllCategoryList() async {
     change(null, status: RxStatus.loading());

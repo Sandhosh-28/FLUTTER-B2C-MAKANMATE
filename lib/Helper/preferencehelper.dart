@@ -214,8 +214,49 @@ class PreferenceHelper {
     return [];
   }
 
+
   static Future<void> removeCartData() async {
     String? email = await PreferenceHelper.getEmail(key: 'my_key');
+    final prefs = await SharedPreferences.getInstance();
+    final key = email;
+    await prefs.remove(key!);
+    log('Cart data removed.');
+  }
+
+
+
+  static Future<void> savemateData(List<ProductModel> cartItems) async {
+    String? emails = await PreferenceHelper.getEmail(key: 'my_key');
+    String? email = "mate$emails";
+    final prefs = await SharedPreferences.getInstance();
+    final key = email;
+    final cartItemsJson = cartItems
+        .map((item) => item.toJson(forSharedPreference: true))
+        .toList();
+    prefs.setString(key!, json.encode(cartItemsJson));
+    PreferenceHelper.log('Saved cart_data: $cartItemsJson');
+  }
+
+  static Future<List<ProductModel>> getmateData() async {
+    String? emails = await PreferenceHelper.getEmail(key: 'my_key');
+    String? email = "mate$emails";
+    final prefs = await SharedPreferences.getInstance();
+    final key = email;
+    if (prefs.containsKey(key!)) {
+      final value = json.decode(prefs.getString(key)!);
+      if (value != null) {
+        return (value as List)
+            .map((item) =>
+            ProductModel.fromJson(item, forSharedPreference: true))
+            .toList();
+      }
+    }
+    return [];
+  }
+
+  static Future<void> removemateData() async {
+    String? emails = await PreferenceHelper.getEmail(key: 'my_key');
+    String? email = "mate$emails";
     final prefs = await SharedPreferences.getInstance();
     final key = email;
     await prefs.remove(key!);

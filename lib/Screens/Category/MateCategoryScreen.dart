@@ -3,21 +3,22 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:makkanmate/Const/colors.dart';
 
-import '../../Const/approute.dart';
-import '../../Const/assets.dart';
-import '../../Helper/preferenceHelper.dart';
-import '../../ModelClass/productmodel.dart';
+import '../../../Const/approute.dart';
+import '../../../Const/assets.dart';
+import '../../../Helper/preferenceHelper.dart';
+import '../../../ModelClass/productmodel.dart';
 import 'ProductDetail/productedtailcontroller.dart';
 import 'categorycontroller.dart';
 
-class CategoryScreen extends StatefulWidget {
-   CategoryScreen({super.key});
+
+class MateCategoryScreen extends StatefulWidget {
+  MateCategoryScreen({super.key});
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  State<MateCategoryScreen> createState() => _MateCategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _MateCategoryScreenState extends State<MateCategoryScreen> {
   late CategoryListController controller;
   late ProductDetailController productDetailController;
   List<String> savedProduct = [];
@@ -29,7 +30,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
     controller = Get.put(CategoryListController());
     productDetailController = Get.put(ProductDetailController());
     controller.getAllCategoryList();
-    productDetailController.cartService.mateChangeStream.listen((_) {
+    productDetailController.cartService.cartChangeStream.listen((_) {
       setState(() {});
     });
     initData();
@@ -38,13 +39,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
   late final List<ProductModel> localData;
 
   Future<void> initData() async {
-    localData = await PreferenceHelper.getmateData();
+    localData = await PreferenceHelper.getCartData();
     if (localData != null) {
       for (int i = 0; i < localData.length; i++) {
         savedProduct.add(localData[i].productCode!);
       }
-      productDetailController.mateAddedProduct.clear();
-      productDetailController.mateAddedProduct.addAll(localData);
+      productDetailController.cartAddedProduct.clear();
+      productDetailController.cartAddedProduct.addAll(localData);
     }
   }
 
@@ -109,7 +110,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           return GestureDetector(
             onTap: () {
               // Get.toNamed(Routes.productListingScreen, arguments: controller.categoryList.value?[index].code ?? "");
-              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : false, "categoryCode" : controller.categoryList.value?[index].code ?? ""} );
+              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : true, "categoryCode" : controller.categoryList.value?[index].code ?? ""} );
               print("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>");
               print(controller.categoryList.value?[index].code);
             },
@@ -120,35 +121,35 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20.0),
                   child:
-                      // Image.asset(
-                      //   Assets.food,
-                      //   fit: BoxFit.fill,
-                      // ),
+                  // Image.asset(
+                  //   Assets.food,
+                  //   fit: BoxFit.fill,
+                  // ),
 
-                      ///Dynamic Changes
-                      (controller.categoryList.value?[index]
-                                  .iconImageFilePath !=
-                              null)
-                          ? ("${controller.categoryList.value?[index].iconImageFilePath}"
-                                  .isNotEmpty)
-                              ? Image.network(
-                                  alignment: Alignment.center,
-                                  controller.categoryList.value?[index]
-                                          .iconImageFilePath ??
-                                      "",
-                                  fit: BoxFit.fill,
-                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                          return Image.asset(
-                            Assets.food,
-                            fit: BoxFit.fill,
-                          ); //isplay error message
-                        },
-                                )
-                              : Image.asset(
-                                  Assets.food,
-                                  fit: BoxFit.fill,
-                                )
-                          : const Icon(Icons.error),
+                  ///Dynamic Changes
+                  (controller.categoryList.value?[index]
+                      .iconImageFilePath !=
+                      null)
+                      ? ("${controller.categoryList.value?[index].iconImageFilePath}"
+                      .isNotEmpty)
+                      ? Image.network(
+                    alignment: Alignment.center,
+                    controller.categoryList.value?[index]
+                        .iconImageFilePath ??
+                        "",
+                    fit: BoxFit.fill,
+                    errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                      return Image.asset(
+                        Assets.food,
+                        fit: BoxFit.fill,
+                      ); //isplay error message
+                    },
+                  )
+                      : Image.asset(
+                    Assets.food,
+                    fit: BoxFit.fill,
+                  )
+                      : const Icon(Icons.error),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -184,10 +185,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Obx(() {
       return GestureDetector(
         onTap: () async {
-          if (productDetailController.mateAddedProduct.isNotEmpty) {
+          if (productDetailController.cartAddedProduct.isNotEmpty) {
             Get.toNamed(Routes.placeOrderScreen,
-                // arguments: productDetailController.mateAddedProduct)
-                arguments:{"isMate" : false, "Products" : productDetailController.mateAddedProduct})
+                arguments:{"isMate" : true, "Products" : productDetailController.cartAddedProduct})
+                // arguments: productDetailController.cartAddedProduct)
                 ?.then((value) {
               if (value == true) {
                 initData();
@@ -222,7 +223,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   color: MyColors.whiteTextFormField,
                 ),
               ),
-              if (productDetailController.mateAddedProduct.isNotEmpty)
+              if (productDetailController.cartAddedProduct.isNotEmpty)
                 Positioned(
                   top: 8,
                   right: 5,
@@ -235,7 +236,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         border: Border.all(color: Colors.white, width: 1)),
                     child: Center(
                       child: Text(
-                        productDetailController.mateAddedProduct.length.toString(),
+                        productDetailController.cartAddedProduct.length.toString(),
                         style: const TextStyle(
                           fontSize: 10,
                           color: MyColors.whiteTextFormField,

@@ -6,6 +6,7 @@ import 'package:makkanmate/Screens/Dashboard/dashboardscreen.dart';
 import '../../../Const/assets.dart';
 import '../../../Const/colors.dart';
 import '../Category/categoryscreen.dart';
+import '../Category/MateCategoryScreen.dart';
 import '../Order/orderscreen.dart';
 import '../Profile/profilescreen.dart';
 
@@ -30,14 +31,17 @@ class _UserBottomNavBarState extends State<UserBottomNavBar> {
   }
 
   void _onItemTapped(int index) {
+    print("=======1223");
     setState(() {
       selectedIndex = index;
     });
+    print(selectedIndex);
   }
 
-  final tab = const [
+
+  final tab =  [
     DashboardScreen(),
-    CategoryScreen(),
+    MateCategoryScreen(),
     CategoryScreen(),
     ProfileScreen(),
   ];

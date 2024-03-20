@@ -19,6 +19,7 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late ProductDetailController controller;
+  bool? checking;
 
   String? productCode;
 
@@ -29,12 +30,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(ProductDetailController());
-    productCode = Get.arguments as String;
-    print("<<<<<<<<<<<$productCode>>>>>>>>>>");
-    controller.productGetByCode(productCode);
-    controller.cartService.cartChangeStream.listen((_) {
-      setState(() {});
-    });
+    final dynamic arguments = Get.arguments;
+    checking = arguments["isMate"] as bool;
+    productCode = arguments['productCode'] as String;
+    print("<<<<<<<<$checking>>>>>>>$productCode");
+    controller.productGetByCode(productCode,checking);
+    if (checking == true) {
+      controller.cartService.cartChangeStream.listen((_) {
+        setState(() {});
+      });
+    }
+    if (checking == false) {
+      controller.cartService.mateChangeStream.listen((_) {
+        setState(() {});
+      });
+    }
     initData();
     controller.updateProductCount();
   }
@@ -42,32 +52,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late final List<ProductModel> localData;
 
   Future<void> initData() async {
-    localData = await PreferenceHelper.getCartData();
-    if (localData != null) {
-      for (int i = 0; i < localData.length; i++) {
-        savedProduct.add(localData[i].productCode!);
+    if (checking == true){
+      localData = await PreferenceHelper.getCartData();
+      if (localData != null) {
+        for (int i = 0; i < localData.length; i++) {
+          savedProduct.add(localData[i].productCode!);
+        }
+        controller.cartAddedProduct.clear();
+        controller.cartAddedProduct.addAll(localData);
       }
-      controller.cartAddedProduct.clear();
-      controller.cartAddedProduct.addAll(localData);
     }
-  }
 
-  ///INCREMENT - DECREMENT FUNCTION
-
-  int counter = 1;
-
-  void increment() {
-    setState(() {
-      counter++;
-    });
-  }
-
-  void decrement() {
-    setState(() {
-      if (counter > 0) {
-        counter--;
+    if (checking == false) {
+      localData = await PreferenceHelper.getmateData();
+      if (localData != null) {
+        for (int i = 0; i < localData.length; i++) {
+          savedProduct.add(localData[i].productCode!);
+        }
+        controller.mateAddedProduct.clear();
+        controller.mateAddedProduct.addAll(localData);
       }
-    });
+    }
+
   }
 
   @override
@@ -82,189 +88,311 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
 
       return Scaffold(
-        body: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 280,
-                pinned: true,
-                automaticallyImplyLeading: false,
-                leading: IconButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  icon: const Icon(Icons.arrow_back_ios_new_outlined),
-                ),
-                title: const Text("Product Detail"),
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Image.asset(
-                    Assets.banner,
-                    fit: BoxFit.fill,
-                  ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: MyColors.mainTheme,
+              expandedHeight: 280,
+              pinned: true,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,),
+              ),
+              title: const Text("Product Detail",style: TextStyle(color: MyColors.whiteTextFormField),),
+              flexibleSpace: FlexibleSpaceBar(
+                background: Image.asset(
+                  Assets.banner,
+                  fit: BoxFit.fill,
                 ),
               ),
-              SliverToBoxAdapter(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 80,
-                        child: productGalleryListView(),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
+              actions: [
+                buildAppBarCartButton()
+              ],
+            ),
+            SliverToBoxAdapter(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      height: 80,
+                      child: productGalleryListView(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(18.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  controller.productList.first.productName ??
+                                      "",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              ElevatedButton(
+                                  onPressed: () {},
+                                  child: const Text("Review"))
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened."
+                            "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16.0,
+                              color: MyColors.textGrey,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Flexible(
+                                child: Text(
+                                  "Add's On",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Card(
+                                elevation: 0,
+                                color: MyColors.lightOrange,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 8),
                                   child: Text(
-                                    controller.productList.first.productName ??
-                                        "",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    "Required".toUpperCase(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
+                                      color: MyColors.orange,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 20),
-                                ElevatedButton(
-                                    onPressed: () {},
-                                    child: const Text("Review"))
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened."
-                              "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Obx(() {
+                            return choiceListView();
+                          }),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Flexible(
+                                child: Text(
+                                  "Choice of Bottom Cookie",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Card(
+                                elevation: 0,
+                                color: MyColors.lightOrange,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 8),
+                                  child: Text(
+                                    "Required".toUpperCase(),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: MyColors.orange,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          bottomChoiceListView(),
+                          const SizedBox(height: 10),
+                          ListTile(
+                            onTap: () {},
+                            leading: const Text(
+                              "Add Special Instructions",
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 16.0,
-                                color: MyColors.textGrey,
                               ),
                             ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Flexible(
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios_outlined),
+                          ),
+                          const Divider(thickness: 1),
+                          const SizedBox(height: 10),
+                          //ADD Button
+                          if (checking == true)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () async {
+
+                                  ProductModel? selectedProduct =
+                                      controller.productList.first;
+
+                                  setState(() {
+                                    controller.cartService.removeFromCart(
+                                        product: selectedProduct);
+                                    controller.updateProductCount();
+                                  });
+
+                                  if (selectedProduct.qtyCount == 0) {
+                                    if (controller.cartAddedProduct.any(
+                                        (element) =>
+                                            element.productCode ==
+                                            selectedProduct.productCode)) {
+                                      var selectedIndex = controller
+                                          .cartAddedProduct
+                                          .indexWhere((element) =>
+                                              element.productCode ==
+                                              selectedProduct.productCode);
+
+                                      controller.cartAddedProduct
+                                          .removeAt(selectedIndex);
+                                      if (controller
+                                          .cartAddedProduct.isEmpty) {
+                                        controller.cartAddedProduct.clear();
+                                      }
+                                    }
+                                  }
+                                  // bottomAppBar(index);
+                                  // if (controller.productList[index].qtycount == 0) {
+                                  //   controller.cartAddedProduct.length = 0;
+                                  // }
+                                  await PreferenceHelper.saveCartData(controller.cartAddedProduct);
+                                },
+                                icon: Image.asset(Assets.minusButton,
+                                  scale: 4,
+                                ),
+                                // iconSize: 50,
+                              ),
+                              const SizedBox(width: 20),
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                transitionBuilder: (Widget child,
+                                    Animation<double> animation) {
+                                  return ScaleTransition(
+                                      scale: animation, child: child);
+                                },
+                                child: SizedBox(
+                                  width: 20,
                                   child: Text(
-                                    "Add's On",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
+                                    '${controller.productList.first.qtyCount.toInt()}',
+                                    key: ValueKey<int>(
+                                      controller.productList.first.qtyCount
+                                              .toInt() ??
+                                          0,
                                     ),
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                Card(
-                                  elevation: 0,
-                                  color: MyColors.lightOrange,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 8),
-                                    child: Text(
-                                      "Required".toUpperCase(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: MyColors.orange,
-                                      ),
+                                    style: const TextStyle(
+                                      color: MyColors.black,
+                                      fontSize: 16,
                                     ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Obx(() {
-                              return choiceListView();
-                            }),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Flexible(
-                                  child: Text(
-                                    "Choice of Bottom Cookie",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 20),
-                                Card(
-                                  elevation: 0,
-                                  color: MyColors.lightOrange,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 8),
-                                    child: Text(
-                                      "Required".toUpperCase(),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: MyColors.orange,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            bottomChoiceListView(),
-                            const SizedBox(height: 10),
-                            ListTile(
-                              onTap: () {},
-                              leading: const Text(
-                                "Add Special Instructions",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 16.0,
                                 ),
                               ),
-                              trailing:
-                                  const Icon(Icons.arrow_forward_ios_outlined),
-                            ),
-                            const Divider(thickness: 1),
-                            const SizedBox(height: 10),
+                              const SizedBox(width: 20),
+                              IconButton(
+                                onPressed: () async {
+                                  ProductModel? selectedProduct =
+                                      controller.productList.value.first;
+                                  if (savedProduct.contains(
+                                      selectedProduct.productCode)) {
+                                    var selectedIndex = controller
+                                        .cartAddedProduct
+                                        .indexWhere((element) =>
+                                            element.productCode ==
+                                            selectedProduct.productCode);
+
+                                    controller.cartAddedProduct
+                                        .removeAt(selectedIndex);
+                                    savedProduct
+                                        .remove(selectedProduct.productCode);
+                                  }
+                                  setState(() {
+                                    controller.cartService
+                                        .addToCart(product: selectedProduct);
+                                    controller.updateProductCount();
+                                  });
+
+                                  if (selectedProduct.qtyCount != 0) {
+                                    bool isAlreadyAdded = controller
+                                        .cartAddedProduct
+                                        .any((element) =>
+                                            element.productCode ==
+                                            selectedProduct.productCode);
+
+                                    if (!isAlreadyAdded) {
+                                      controller.cartAddedProduct
+                                          .add(selectedProduct);
+                                    }
+                                  }
+                                  await PreferenceHelper.saveCartData(
+                                      controller.cartAddedProduct);
+                                },
+                                icon: Image.asset(Assets.plusButton,     scale: 4,
+                                ),
+                                // iconSize: 50,
+                              ),
+                            ],
+                          ),
+                          if (checking == false)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
                                   onPressed: () async {
+
                                     ProductModel? selectedProduct =
                                         controller.productList.first;
 
                                     setState(() {
-                                      controller.cartService.removeFromCart(
+                                      controller.cartService.removeFromCart1(
                                           product: selectedProduct);
-                                      controller.updateProductCount();
+                                      controller.updateProductCount1();
                                     });
 
                                     if (selectedProduct.qtyCount == 0) {
-                                      if (controller.cartAddedProduct.any(
-                                          (element) =>
-                                              element.productCode ==
+                                      if (controller.mateAddedProduct.any(
+                                              (element) =>
+                                          element.productCode ==
                                               selectedProduct.productCode)) {
                                         var selectedIndex = controller
-                                            .cartAddedProduct
+                                            .mateAddedProduct
                                             .indexWhere((element) =>
-                                                element.productCode ==
-                                                selectedProduct.productCode);
+                                        element.productCode ==
+                                            selectedProduct.productCode);
 
-                                        controller.cartAddedProduct
+                                        controller.mateAddedProduct
                                             .removeAt(selectedIndex);
-                                        if (controller
-                                            .cartAddedProduct.isEmpty) {
-                                          controller.cartAddedProduct.clear();
+                                        if (controller.mateAddedProduct.isEmpty) {
+                                          controller.mateAddedProduct.clear();
+
                                         }
                                       }
                                     }
@@ -272,11 +400,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     // if (controller.productList[index].qtycount == 0) {
                                     //   controller.cartAddedProduct.length = 0;
                                     // }
-                                    await PreferenceHelper.saveCartData(
-                                        controller.cartAddedProduct);
+                                    await PreferenceHelper.savemateData(controller.mateAddedProduct);
                                   },
-                                  icon: Image.asset(Assets.minusButton),
-                                  iconSize: 50,
+                                  icon: Image.asset(Assets.minusButton,
+                                    scale: 4,
+                                  ),
+                                  // iconSize: 50,
                                 ),
                                 const SizedBox(width: 20),
                                 AnimatedSwitcher(
@@ -292,7 +421,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       '${controller.productList.first.qtyCount.toInt()}',
                                       key: ValueKey<int>(
                                         controller.productList.first.qtyCount
-                                                .toInt() ??
+                                            .toInt() ??
                                             0,
                                       ),
                                       style: const TextStyle(
@@ -308,92 +437,99 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   onPressed: () async {
                                     ProductModel? selectedProduct =
                                         controller.productList.value.first;
+                                    print("selectedProduct");
+                                    print(selectedProduct);
                                     if (savedProduct.contains(
                                         selectedProduct.productCode)) {
                                       var selectedIndex = controller
-                                          .cartAddedProduct
+                                          .mateAddedProduct
                                           .indexWhere((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
-                                      controller.cartAddedProduct
+                                      controller.mateAddedProduct
                                           .removeAt(selectedIndex);
                                       savedProduct
                                           .remove(selectedProduct.productCode);
                                     }
                                     setState(() {
                                       controller.cartService
-                                          .addToCart(product: selectedProduct);
-                                      controller.updateProductCount();
+                                          .addToCart1(product: selectedProduct);
+                                      controller.updateProductCount1();
                                     });
 
                                     if (selectedProduct.qtyCount != 0) {
                                       bool isAlreadyAdded = controller
-                                          .cartAddedProduct
+                                          .mateAddedProduct
                                           .any((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
                                       if (!isAlreadyAdded) {
-                                        controller.cartAddedProduct
+                                        controller.mateAddedProduct
                                             .add(selectedProduct);
                                       }
                                     }
-                                    await PreferenceHelper.saveCartData(
-                                        controller.cartAddedProduct);
+                                    print("controller.mateAddedProduct.length");
+                                    print(controller.mateAddedProduct.length);
+                                    await PreferenceHelper.savemateData(
+                                        controller.mateAddedProduct);
+                                    var data = await PreferenceHelper.getmateData();
+                                    print("data.length");
+                                    print(data.length);
                                   },
-                                  icon: Image.asset(Assets.plusButton),
-                                  iconSize: 50,
+                                  icon: Image.asset(Assets.plusButton,     scale: 4,
+                                  ),
+                                  // iconSize: 50,
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 10),
-                            SubmitButton(
-                                isLoading: false,
-                                onTap: () {
-                                  Get.toNamed(Routes.placeOrderScreen,
-                                      arguments: controller.cartAddedProduct);
-                                },
-                                title: "ADD"),
-                            const SizedBox(height: 20),
-                            const Text(
-                              "Featured Items",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
+                          const SizedBox(height: 10),
+                          SubmitButton(
+                              isLoading: false,
+                              onTap: () {
+                                Get.toNamed(Routes.placeOrderScreen,
+                                    arguments: controller.cartAddedProduct);
+                              },
+                              title: "ADD"),
+                          const SizedBox(height: 20),
+                          const Text(
+                            "Featured Items",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
                             ),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              height: 250,
-                              child: featuredListView(),
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 250,
+                            child: featuredListView(),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text(
+                            "Most Popular",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
                             ),
-                            const SizedBox(height: 10),
-                            const Text(
-                              "Most Popular",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.0,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              height: 250,
-                              child: mostPopularListView(),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 250,
+                            child: mostPopularListView(),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     });
@@ -582,7 +718,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   ///MOST POPULAR
-
   mostPopularListView() {
     return ListView.builder(
         shrinkWrap: true,
@@ -650,5 +785,130 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           );
         });
+  }
+
+  buildAppBarCartButton() {
+    return Obx(() {
+      return GestureDetector(
+        onTap: () async {
+          if (checking == true) {
+            if (controller.cartAddedProduct.isNotEmpty) {
+              Get.toNamed(Routes.placeOrderScreen,
+                  arguments:{"isMate" : true, "Products" : controller.cartAddedProduct})
+              // arguments: controller.cartAddedProduct)
+                  ?.then((value) {
+                if (value == true) {
+                  initData();
+                }
+              });
+            } else {
+              Get.showSnackbar(
+                const GetSnackBar(
+                  margin: EdgeInsets.all(10),
+                  borderRadius: 10,
+                  backgroundColor: Colors.red,
+                  snackPosition: SnackPosition.TOP,
+                  message: "Please select atleast one product",
+                  icon: Icon(
+                    Icons.error,
+                    color: Colors.white,
+                  ),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            }
+          }
+
+          if (checking == false) {
+            if (controller.mateAddedProduct.isNotEmpty) {
+              Get.toNamed(Routes.placeOrderScreen,
+                  arguments:{"isMate" : false, "Products" : controller.mateAddedProduct})
+              // arguments: controller.mateAddedProduct)
+                  ?.then((value) {
+                if (value == true) {
+                  initData();
+                }
+              });
+            } else {
+              Get.showSnackbar(
+                const GetSnackBar(
+                  margin: EdgeInsets.all(10),
+                  borderRadius: 10,
+                  backgroundColor: Colors.red,
+                  snackPosition: SnackPosition.TOP,
+                  message: "Please select atleast one product",
+                  icon: Icon(
+                    Icons.error,
+                    color: Colors.white,
+                  ),
+                  duration: Duration(seconds: 3),
+                ),
+              );
+            }
+          }
+
+
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 11.0),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 11.0),
+                child: Icon(
+                  Icons.shopping_cart_outlined,
+                  color: MyColors.whiteTextFormField,
+                ),
+              ),
+              if (checking == true && controller.cartAddedProduct.isNotEmpty)
+                Positioned(
+                  top: 8,
+                  right: 5,
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xffc32c37),
+                        border: Border.all(color: Colors.white, width: 1)),
+                    child: Center(
+                      child: Text(
+                        controller.cartAddedProduct.length.toString(),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: MyColors.whiteTextFormField,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              if (checking == false && controller.mateAddedProduct.isNotEmpty)
+                Positioned(
+                  top: 8,
+                  right: 5,
+                  child: Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xffc32c37),
+                        border: Border.all(color: Colors.white, width: 1)),
+                    child: Center(
+                      child: Text(
+                        controller.mateAddedProduct.length.toString(),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: MyColors.whiteTextFormField,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

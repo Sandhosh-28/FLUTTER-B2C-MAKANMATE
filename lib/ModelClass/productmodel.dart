@@ -220,6 +220,9 @@ class ProductModel {
         productTagHeaderInfo?.add(ProductTagHeaderInfo.fromJson(v));
       });
     }
+    if (forSharedPreference == true) {
+      qtyCount = json['qtycount'] as int? ?? 0;
+    }
   }
   String? productName;
   int? orgId;
@@ -432,6 +435,9 @@ class ProductModel {
       map['ProductTagHeaderInfo'] =
           productTagHeaderInfo?.map((v) => v.toJson()).toList();
     }
+    if (forSharedPreference == true) {
+      map['qtycount'] = qtyCount;
+    }
     return map;
   }
 }
@@ -554,7 +560,7 @@ class RelatedProductInfo {
   String? productCode;
   String? relatedProductCode;
   String? relatedProductName;
-  int? sellingCost;
+  double? sellingCost;
   String? imageFileName;
   String? imageFilePath;
   String? createdBy;
@@ -643,8 +649,8 @@ class BranchPrice {
   int? orgId;
   String? productCode;
   String? branchCode;
-  int? retailPrice;
-  int? minRetailPrice;
+  double? retailPrice;
+  double? minRetailPrice;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -756,7 +762,7 @@ class EcommerceDetail {
   String? productCode;
   String? desciption;
   String? specification;
-  int? sellingPrice;
+  double? sellingPrice;
   String? sEOMetaTitle;
   String? sEOMetaKeyword;
   String? sEOMetaDescription;
@@ -829,7 +835,7 @@ class UomPriceDetail {
   String? productCode;
   String? code;
   int? qty;
-  int? price;
+  double? price;
   bool? isActive;
   String? createdBy;
   String? createdOn;
@@ -880,7 +886,7 @@ class ProductBarcode {
   String? productCode;
   String? productName;
   String? barcode;
-  int? cartonPrice;
+  double? cartonPrice;
   String? createdBy;
   String? createdOn;
   String? changedBy;

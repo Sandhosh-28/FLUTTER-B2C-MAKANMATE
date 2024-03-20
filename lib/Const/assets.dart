@@ -38,5 +38,6 @@ class Assets {
   static const String grocery = "assets/images/grocery.png";
   static const String foodH = "assets/images/foodH.png";
   static const String noImage = "assets/images/noImage.jpg";
+  static const String noproductImage = "assets/images/productEmpty.png";
   static const String successfully = "assets/images/successfully.gif";
 }
