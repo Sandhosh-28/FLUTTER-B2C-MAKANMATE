@@ -47,6 +47,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     initData();
     controller.updateProductCount();
+    controller.mostPopularListView();
+    controller.featuredItemListView();
   }
 
   late final List<ProductModel> localData;
@@ -101,8 +103,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               title: const Text("Product Detail"),
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.asset(
-                  Assets.banner,
+                background: Image.network(
+                  controller.productList.first.productImagePath ?? "",
                   fit: BoxFit.fill,
                 ),
               ),
@@ -112,11 +114,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 80,
-                      child: productGalleryListView(),
-                    ),
+                    // const SizedBox(height: 20),
+                    // SizedBox(
+                    //   height: 80,
+                    //   child: productGalleryListView(),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(18.0),
                       child: Column(
@@ -642,11 +644,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   ///FEATURED ITEMS LISTVIEW
-
   featuredListView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: 5,
+        itemCount: controller.featuredItemList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return SizedBox(
@@ -661,39 +662,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     width: 150,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        Assets.food3,
-                        fit: BoxFit.fitWidth,
-                      ),
+                      child: (controller
+                                  .featuredItemList[index].productImagePath !=
+                              null)
+                          ? Image.network(
+                              controller.featuredItemList[index]
+                                      .productImagePath ??
+                                  "",
+                              fit: BoxFit.fill,
+                            )
+                          : Image.asset(
+                              Assets.food3,
+                              fit: BoxFit.fill,
+                            ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Chow Fun",
+                  Text(
+                    controller.featuredItemList[index].name ?? "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 15),
-                  const Align(
+                  Align(
                     alignment: Alignment.topLeft,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
                           child: Text(
-                            "\$ 8.00",
+                            "\$ ${controller.featuredItemList[index].sellingCost ?? ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyle(fontSize: 15, color: MyColors.black),
+                            style: const TextStyle(
+                                fontSize: 15, color: MyColors.black),
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Flexible(
+                        const SizedBox(width: 10),
+                        const Flexible(
                           child: Text(
                             "Chinese",
                             maxLines: 1,
@@ -716,7 +726,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   mostPopularListView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: 5,
+        itemCount: controller.mostPopularBookList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return SizedBox(
@@ -731,39 +741,48 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     width: 150,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        Assets.item,
-                        fit: BoxFit.fitWidth,
-                      ),
+                      child: controller.mostPopularBookList[index]
+                                  .productImagePath !=
+                              null
+                          ? Image.network(
+                              controller.mostPopularBookList[index]
+                                      .productImagePath ??
+                                  "",
+                              fit: BoxFit.fill,
+                            )
+                          : Image.asset(
+                              Assets.item,
+                              fit: BoxFit.fill,
+                            ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Cookie Sandwich",
+                  Text(
+                    controller.mostPopularBookList[index].name ?? "",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 15),
-                  const Align(
+                  Align(
                     alignment: Alignment.topLeft,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
                           child: Text(
-                            "\$ 8.00",
+                            "\$ ${controller.mostPopularBookList[index].sellingCost ?? ""}",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyle(fontSize: 15, color: MyColors.black),
+                            style: const TextStyle(
+                                fontSize: 15, color: MyColors.black),
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Flexible(
+                        const SizedBox(width: 10),
+                        const Flexible(
                           child: Text(
                             "Chinese",
                             maxLines: 1,
