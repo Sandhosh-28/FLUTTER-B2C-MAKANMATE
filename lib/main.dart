@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
               fontSize: 20,
               color: MyColors.black,
             )),
-
       ),
       initialRoute: Routes.walkthroughScreen1,
       // initialRoute: Routes.loginScreen,

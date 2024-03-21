@@ -99,7 +99,7 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
     return GridView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: controller.categoryList.value?.length,
+        itemCount: controller.mategoryList?.length,
         // controller.categoryList.value?.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -110,9 +110,9 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
           return GestureDetector(
             onTap: () {
               // Get.toNamed(Routes.productListingScreen, arguments: controller.categoryList.value?[index].code ?? "");
-              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : true, "categoryCode" : controller.categoryList.value?[index].code ?? ""} );
+              Get.toNamed(Routes.productListingScreen, arguments: {"isMate" : true, "categoryCode" : controller.mategoryList?[index].code ?? ""} );
               print("<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>");
-              print(controller.categoryList.value?[index].code);
+              print(controller.mategoryList?[index].code);
             },
             child: Stack(
               alignment: Alignment.center,
@@ -127,14 +127,14 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
                   // ),
 
                   ///Dynamic Changes
-                  (controller.categoryList.value?[index]
+                  (controller.mategoryList?[index]
                       .iconImageFilePath !=
                       null)
-                      ? ("${controller.categoryList.value?[index].iconImageFilePath}"
+                      ? ("${controller.mategoryList?[index].iconImageFilePath}"
                       .isNotEmpty)
                       ? Image.network(
                     alignment: Alignment.center,
-                    controller.categoryList.value?[index]
+                    controller.mategoryList?[index]
                         .iconImageFilePath ??
                         "",
                     fit: BoxFit.fill,
@@ -161,7 +161,7 @@ class _MateCategoryScreenState extends State<MateCategoryScreen> {
                   child: Padding(
                     padding: EdgeInsets.all(18.0),
                     child: Text(
-                      controller.categoryList.value?[index].name ?? "",
+                      controller.mategoryList?[index].name ?? "",
                       // "Korean",
                       textAlign: TextAlign.center,
                       maxLines: 3,

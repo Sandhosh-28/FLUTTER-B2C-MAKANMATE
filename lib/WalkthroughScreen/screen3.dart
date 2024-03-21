@@ -36,7 +36,7 @@ class _WalkthroughScreen3State extends State<WalkthroughScreen3>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3), // Adjust the duration as needed
+      duration: const Duration(seconds: 3),
     );
 
     _animation = Tween<double>(
