@@ -54,10 +54,7 @@ class _AddressListingScreenState extends State<AddressListingScreen> {
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(18.0),
-          child: SizedBox(
-            // height: height(context),
-            child: addressListView(),
-          ),
+          child: addressListView(),
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
@@ -90,7 +87,7 @@ class _AddressListingScreenState extends State<AddressListingScreen> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +106,11 @@ class _AddressListingScreenState extends State<AddressListingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Home",
+                              (controller.addressList.value?[index].name)
+                                      ?.toUpperCase() ??
+                                  (controller.addressList.value?[index]
+                                          .addressLine1)!
+                                      .toUpperCase(),
                               style: TextStyle(
                                 fontFamily: MyFont.myFont,
                                 fontWeight: FontWeight.bold,

@@ -33,7 +33,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
 
   bool? checking;
 
-
   int selectedAddressIndex = -1;
 
   String? sendSalesAddress;
@@ -45,8 +44,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
     getUserData();
     final dynamic arguments = Get.arguments;
     checking = arguments["isMate"] as bool;
-    ProductDetailController _cartController = Get.put(ProductDetailController());
-    if (checking  == true) {
+    ProductDetailController _cartController =
+        Get.put(ProductDetailController());
+    if (checking == true) {
       controller.selectedItems = _cartController.cartAddedProduct.value;
       controller.cartService.cartChangeStream.listen((_) {});
     }
@@ -55,6 +55,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       controller.selectedItems = _cartController.mateAddedProduct.value;
       controller.cartService.mateChangeStream.listen((_) {});
     }
+    controller.getAddress();
   }
 
   getUserData() async {

@@ -48,6 +48,12 @@ class _WalkthroughScreen3State extends State<WalkthroughScreen3>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _animation,

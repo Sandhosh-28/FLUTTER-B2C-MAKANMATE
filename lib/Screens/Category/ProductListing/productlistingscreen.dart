@@ -44,11 +44,11 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
         setState(() {});
       });
     }
-   if (checking == false) {
-     productDetailController.cartService.mateChangeStream.listen((_) {
-       setState(() {});
-     });
-   }
+    if (checking == false) {
+      productDetailController.cartService.mateChangeStream.listen((_) {
+        setState(() {});
+      });
+    }
     initData();
   }
 
@@ -56,7 +56,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
   Future<void> initData() async {
     scrollController.addListener(_scrollListener);
-    if (checking == true){
+    if (checking == true) {
       localData = await PreferenceHelper.getCartData();
       if (localData != null) {
         for (int i = 0; i < localData.length; i++) {
@@ -109,31 +109,28 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
       }
       return (controller.productList.isNotEmpty)
           ? Scaffold(
-        appBar: AppBar(
-          backgroundColor: MyColors.mainTheme,
-          leading: IconButton(
-              onPressed: () {
-                Get.offAllNamed(Routes.userBottomNavBar);
-              },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,)),
-          title: const Text("Category",style: TextStyle(color: MyColors.whiteTextFormField),),
+              appBar: AppBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Get.offAllNamed(Routes.userBottomNavBar);
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+                title: const Text("Category"),
 
-            // IconButton(
-            //     onPressed: () {},
-            //     icon: const Icon(
-            //       Icons.search,
-            //       color: MyColors.whiteTextFormField,
-            //     )),
-            // IconButton(
-            //     onPressed: () {},
-            //     icon: const Icon(
-            //       Icons.notifications_none,
-            //       color: MyColors.whiteTextFormField,
-            //     )),
-            actions: [
-              buildAppBarCartButton()
-          ],
-        ),
+                // IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.search,
+                //       color: MyColors.whiteTextFormField,
+                //     )),
+                // IconButton(
+                //     onPressed: () {},
+                //     icon: const Icon(
+                //       Icons.notifications_none,
+                //       color: MyColors.whiteTextFormField,
+                //     )),
+                actions: [buildAppBarCartButton()],
+              ),
               body: SingleChildScrollView(
                 controller: scrollController,
                 padding: const EdgeInsets.all(18.0),
@@ -197,7 +194,6 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                       controller.subCategoryList.value?[index].code ?? '',
                   isPagination: false,
                   subCategoryL2Name: '');
-
             },
             child: Card(
               color: selectedListIndex == index
@@ -361,146 +357,133 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
       return Column(
         children: [
           GridView.builder(
-                shrinkWrap: true,
-                itemCount: controller.productList.length,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisExtent: 300,
-                  mainAxisSpacing: 10.0,
-                  crossAxisSpacing: 10.0,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      // Get.toNamed(Routes.productDetailScreen, arguments: controller.productList[index].productCode);
-                      Get.toNamed(Routes.productDetailScreen, arguments: {"isMate" : checking, "productCode" : controller.productList[index].productCode ?? ""} );
-
-                    },
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        SizedBox(
-                          height: 300,
-                          width: 300,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child:
-                            // controller.productList[index].productImagePath !=
-                            //         null
-                            //     ? Image.network(
-                            //         controller.productList[index].productImagePath ??
-                            //             "https://images.pexels.com/photos/327158/pexels-photo-327158.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            //         fit: BoxFit.fill,
-                            //       )
-                            //     : Image.asset(
-                            //         Assets.food1,
-                            //         fit: BoxFit.fill,
-                            //       ),
-
-                            (controller.productList[index]
-                                .productImagePath !=
-                                null)
-                                ? ("${controller.productList[index].productImagePath}"
-                                .isNotEmpty)
-                                ? Image.network(
-                              '${controller.productList[index].productImagePath}',
-                              height: height(context) / 9,
-                              width: width(context) / 5,
-                              errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                                return Image.asset(
-                                  Assets.noproductImage,
-                                  height: height(context) / 9,
-                                  width: width(context) / 5,
-                                ); // Display error message
-                              },
-                            )
-                                : Image.asset(
-                              Assets.noproductImage,
-                              height: height(context) / 9,
-                              width: width(context) / 5,
-                            )
-                                : const Icon(Icons.error),
-                          ),
+              shrinkWrap: true,
+              itemCount: controller.productList.length,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 300,
+                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 20.0,
+              ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Get.toNamed(Routes.productDetailScreen, arguments: controller.productList[index].productCode);
+                    Get.toNamed(Routes.productDetailScreen, arguments: {
+                      "isMate": checking,
+                      "productCode":
+                          controller.productList[index].productCode ?? ""
+                    });
+                  },
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      SizedBox(
+                        height: 300,
+                        width: 300,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: (controller
+                                      .productList[index].productImagePath !=
+                                  null)
+                              ? ("${controller.productList[index].productImagePath}"
+                                      .isNotEmpty)
+                                  ? Image.network(
+                                      '${controller.productList[index].productImagePath}',
+                                      fit: BoxFit.fill,
+                                      errorBuilder: (BuildContext context,
+                                          Object error,
+                                          StackTrace? stackTrace) {
+                                        return Image.asset(
+                                          Assets.noproductImage,
+                                          fit: BoxFit.fill,
+                                        ); // Display error message
+                                      },
+                                    )
+                                  : Image.asset(
+                                      Assets.noproductImage,
+                                      fit: BoxFit.fill,
+                                    )
+                              : const Icon(Icons.error),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        Assets.mins,
-                                        scale: 2,
-                                        color: MyColors.mainTheme,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text(
-                                        "25 Mins",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: MyColors.mainTheme,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Image.asset(
-                                        Assets.doller,
-                                        scale: 3,
-                                        color: MyColors.mainTheme,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      const Text(
-                                        "2590",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: MyColors.mainTheme,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const Card(
-                                color: MyColors.primaryCustom,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 5),
-                                  child: Text(
-                                    "49.5",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: MyColors.whiteTextFormField,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      Assets.mins,
+                                      scale: 2,
+                                      color: MyColors.mainTheme,
                                     ),
+                                    const SizedBox(width: 5),
+                                    const Text(
+                                      "25 Mins",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: MyColors.mainTheme,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      Assets.doller,
+                                      scale: 3,
+                                      color: MyColors.mainTheme,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    const Text(
+                                      "2590",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: MyColors.mainTheme,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const Card(
+                              color: MyColors.primaryCustom,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                                child: Text(
+                                  "49.5",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: MyColors.whiteTextFormField,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                }),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }),
           if (controller.status.isLoadingMore)
             const Center(
-                child: CircularProgressIndicator(color: MyColors.mainTheme)
-            ),
+                child: CircularProgressIndicator(color: MyColors.mainTheme)),
         ],
       );
     } else if (controller.status.isLoadingMore || controller.status.isLoading) {
       return const Center(
-          child: CircularProgressIndicator(color: MyColors.mainTheme)
-      );
+          child: CircularProgressIndicator(color: MyColors.mainTheme));
     } else {
       return const Center(
         child: Padding(
@@ -517,9 +500,11 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
         onTap: () async {
           if (checking == true) {
             if (productDetailController.cartAddedProduct.isNotEmpty) {
-              Get.toNamed(Routes.placeOrderScreen,
-                  arguments:{"isMate" : true, "Products" : productDetailController.cartAddedProduct})
-              // arguments: productDetailController.cartAddedProduct)
+              Get.toNamed(Routes.placeOrderScreen, arguments: {
+                "isMate": true,
+                "Products": productDetailController.cartAddedProduct
+              })
+                  // arguments: productDetailController.cartAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();
@@ -535,7 +520,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                   message: "Please select atleast one product",
                   icon: Icon(
                     Icons.error,
-                    color: Colors.white,
+                    color: Colors.grey,
                   ),
                   duration: Duration(seconds: 3),
                 ),
@@ -545,9 +530,11 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
 
           if (checking == false) {
             if (productDetailController.mateAddedProduct.isNotEmpty) {
-              Get.toNamed(Routes.placeOrderScreen,
-                  arguments:{"isMate" : false, "Products" : productDetailController.mateAddedProduct})
-              // arguments: productDetailController.mateAddedProduct)
+              Get.toNamed(Routes.placeOrderScreen, arguments: {
+                "isMate": false,
+                "Products": productDetailController.mateAddedProduct
+              })
+                  // arguments: productDetailController.mateAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();
@@ -580,10 +567,11 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                 padding: EdgeInsets.only(right: 11.0),
                 child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: MyColors.whiteTextFormField,
+                  color: MyColors.grey,
                 ),
               ),
-              if (checking == true && productDetailController.cartAddedProduct.isNotEmpty)
+              if (checking == true &&
+                  productDetailController.cartAddedProduct.isNotEmpty)
                 Positioned(
                   top: 8,
                   right: 5,
@@ -596,7 +584,8 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                         border: Border.all(color: Colors.white, width: 1)),
                     child: Center(
                       child: Text(
-                        productDetailController.cartAddedProduct.length.toString(),
+                        productDetailController.cartAddedProduct.length
+                            .toString(),
                         style: const TextStyle(
                           fontSize: 10,
                           color: MyColors.whiteTextFormField,
@@ -605,7 +594,8 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                     ),
                   ),
                 ),
-              if (checking == false && productDetailController.mateAddedProduct.isNotEmpty)
+              if (checking == false &&
+                  productDetailController.mateAddedProduct.isNotEmpty)
                 Positioned(
                   top: 8,
                   right: 5,
@@ -618,7 +608,8 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                         border: Border.all(color: Colors.white, width: 1)),
                     child: Center(
                       child: Text(
-                        productDetailController.mateAddedProduct.length.toString(),
+                        productDetailController.mateAddedProduct.length
+                            .toString(),
                         style: const TextStyle(
                           fontSize: 10,
                           color: MyColors.whiteTextFormField,
@@ -633,5 +624,4 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
       );
     });
   }
-
 }

@@ -38,6 +38,8 @@ class HttpUrl {
 
   static String customerOrderGetByCode = '${base}B2CCustomerOrder/Getbycode?';
 
+  static String getProductByTagCode = '${base}/Product/GetByTagCode?';
+
   static String b2cCustomerOrderListing =
       '${base}B2CCustomerOrder/GetHeaderSearch?';
 }

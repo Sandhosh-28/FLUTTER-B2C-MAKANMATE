@@ -11,7 +11,7 @@ import 'ProductDetail/productedtailcontroller.dart';
 import 'categorycontroller.dart';
 
 class CategoryScreen extends StatefulWidget {
-   CategoryScreen({super.key});
+  CategoryScreen({super.key});
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -62,16 +62,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: MyColors.mainTheme,
           leading: IconButton(
               onPressed: () {
                 Get.offAllNamed(Routes.userBottomNavBar);
               },
-              icon: const Icon(Icons.arrow_back_ios_new_outlined,color: MyColors.whiteTextFormField,)),
-          title: const Text("Category",style: TextStyle(color: MyColors.whiteTextFormField),),
-          actions: [
-            buildAppBarCartButton()
-          ],
+              icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+          title: const Text("Category"),
+          actions: [buildAppBarCartButton()],
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(18.0),
@@ -137,12 +134,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           .iconImageFilePath ??
                                       "",
                                   fit: BoxFit.fill,
-                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                          return Image.asset(
-                            Assets.food,
-                            fit: BoxFit.fill,
-                          ); //isplay error message
-                        },
+                                  errorBuilder: (BuildContext context,
+                                      Object error, StackTrace? stackTrace) {
+                                    return Image.asset(
+                                      Assets.food,
+                                      fit: BoxFit.fill,
+                                    ); //isplay error message
+                                  },
                                 )
                               : Image.asset(
                                   Assets.food,

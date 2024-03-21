@@ -7,6 +7,8 @@ import 'package:makkanmate/WalkthroughScreen/screen2.dart';
 import '../Const/approute.dart';
 import '../Const/assets.dart';
 import '../Const/colors.dart';
+import '../Helper/preferenceHelper.dart';
+import '../ModelClass/loginmodel.dart';
 import '../Screens/Widget/submitbutton.dart';
 
 class WalkthroughScreen1 extends StatefulWidget {
@@ -21,14 +23,20 @@ class _WalkthroughScreen1State extends State<WalkthroughScreen1>
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  var b2cCustomer;
+  B2cLoginModel? b2cLoginModel;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    Timer(const Duration(seconds: 10), () {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (builder) => const WalkthroughScreen2()));
+    _initialiseData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer(
+          const Duration(seconds: 1),
+          () => (b2cLoginModel != null)
+              ? Get.offAllNamed(Routes.userBottomNavBar)
+              : Get.offAllNamed(Routes.walkthroughScreen2));
     });
 
     _controller = AnimationController(
@@ -42,7 +50,20 @@ class _WalkthroughScreen1State extends State<WalkthroughScreen1>
     ).animate(_controller);
     _controller.forward();
   }
-  
+
+  _initialiseData() async {
+    b2cLoginModel = await PreferenceHelper.getUserData();
+    setState(() {
+      b2cCustomer = b2cLoginModel?.b2CCustomerId;
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
