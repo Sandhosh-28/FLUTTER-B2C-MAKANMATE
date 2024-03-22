@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:makkanmate/Const/colors.dart';
-import 'package:makkanmate/Const/size.dart';
-import 'package:makkanmate/Screens/Category/ProductDetail/productedtailcontroller.dart';
-import 'package:makkanmate/Screens/Widget/submitbutton.dart';
-
 import '../../../Const/approute.dart';
 import '../../../Const/assets.dart';
 import '../../../Helper/preferenceHelper.dart';
 import '../../../ModelClass/productmodel.dart';
+import '../ProductDetail/productedtailcontroller.dart';
+import 'FeaturedController.dart';
 
-class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key});
+class FeatureedScreen extends StatefulWidget {
+  const FeatureedScreen({super.key});
 
   @override
-  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  State<FeatureedScreen> createState() => _FeatureedScreenState();
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
+class _FeatureedScreenState extends State<FeatureedScreen> {
   late ProductDetailController controller;
   bool? checking;
 
@@ -33,7 +31,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final dynamic arguments = Get.arguments;
     checking = arguments["isMate"] as bool;
     productCode = arguments['productCode'] as String;
-    print("<<<<<<<<$checking>>>>>>>$productCode");
+    print("dataer<<<<<<<<$checking>>>>>>>$productCode");
     controller.productGetByCode(productCode, checking);
 
     if (checking == true) {
@@ -48,8 +46,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
     initData();
     controller.updateProductCount();
-    // controller.mostPopularListView();
-    // controller.featuredItemListView();
   }
 
   late final List<ProductModel> localData;
@@ -156,7 +152,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           const SizedBox(height: 10),
                           const Text(
                             "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened."
-                            "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
+                                "Shortbread, chocolate turtle cookies, and red velvet. 8 ounces cream cheese, softened.",
                             style: TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 16.0,
@@ -246,7 +242,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             ),
                             trailing:
-                                const Icon(Icons.arrow_forward_ios_outlined),
+                            const Icon(Icons.arrow_forward_ios_outlined),
                           ),
                           const Divider(thickness: 1),
                           const SizedBox(height: 10),
@@ -268,14 +264,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                                     if (selectedProduct.qtyCount == 0) {
                                       if (controller.cartAddedProduct.any(
-                                          (element) =>
-                                              element.productCode ==
+                                              (element) =>
+                                          element.productCode ==
                                               selectedProduct.productCode)) {
                                         var selectedIndex = controller
                                             .cartAddedProduct
                                             .indexWhere((element) =>
-                                                element.productCode ==
-                                                selectedProduct.productCode);
+                                        element.productCode ==
+                                            selectedProduct.productCode);
 
                                         controller.cartAddedProduct
                                             .removeAt(selectedIndex);
@@ -312,7 +308,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       '${controller.productList.first.qtyCount.toInt()}',
                                       key: ValueKey<int>(
                                         controller.productList.first.qtyCount
-                                                .toInt() ??
+                                            .toInt() ??
                                             0,
                                       ),
                                       style: const TextStyle(
@@ -333,8 +329,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       var selectedIndex = controller
                                           .cartAddedProduct
                                           .indexWhere((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
                                       controller.cartAddedProduct
                                           .removeAt(selectedIndex);
@@ -351,8 +347,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       bool isAlreadyAdded = controller
                                           .cartAddedProduct
                                           .any((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
                                       if (!isAlreadyAdded) {
                                         controller.cartAddedProduct
@@ -387,14 +383,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                                     if (selectedProduct.qtyCount == 0) {
                                       if (controller.mateAddedProduct.any(
-                                          (element) =>
-                                              element.productCode ==
+                                              (element) =>
+                                          element.productCode ==
                                               selectedProduct.productCode)) {
                                         var selectedIndex = controller
                                             .mateAddedProduct
                                             .indexWhere((element) =>
-                                                element.productCode ==
-                                                selectedProduct.productCode);
+                                        element.productCode ==
+                                            selectedProduct.productCode);
 
                                         controller.mateAddedProduct
                                             .removeAt(selectedIndex);
@@ -431,7 +427,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       '${controller.productList.first.qtyCount.toInt()}',
                                       key: ValueKey<int>(
                                         controller.productList.first.qtyCount
-                                                .toInt() ??
+                                            .toInt() ??
                                             0,
                                       ),
                                       style: const TextStyle(
@@ -454,8 +450,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       var selectedIndex = controller
                                           .mateAddedProduct
                                           .indexWhere((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
                                       controller.mateAddedProduct
                                           .removeAt(selectedIndex);
@@ -472,8 +468,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       bool isAlreadyAdded = controller
                                           .mateAddedProduct
                                           .any((element) =>
-                                              element.productCode ==
-                                              selectedProduct.productCode);
+                                      element.productCode ==
+                                          selectedProduct.productCode);
 
                                       if (!isAlreadyAdded) {
                                         controller.mateAddedProduct
@@ -485,7 +481,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     await PreferenceHelper.savemateData(
                                         controller.mateAddedProduct);
                                     var data =
-                                        await PreferenceHelper.getmateData();
+                                    await PreferenceHelper.getmateData();
                                     print("data.length");
                                     print(data.length);
                                   },
@@ -497,41 +493,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ],
                             ),
-
-                          const SizedBox(height: 20),
-                          if (controller.featuredItemList.isNotEmpty)
-                          const Text(
-                            "Featured Items",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          if (controller.featuredItemList.isNotEmpty)
-                          SizedBox(
-                            height: 255,
-                            child: featuredListView(),
-                          ),
-                          const SizedBox(height: 10),
-                          if (controller.mostPopularBookList.isNotEmpty)
-                          const Text(
-                            "Most Popular",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          if (controller.mostPopularBookList.isNotEmpty)
-                            SizedBox(
-                            height: 255,
-                            child: mostPopularListView(),
-                          ),
                         ],
                       ),
                     ),
@@ -598,7 +559,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   // ),
                   Text(
                     controller.productList.first.masterCustomAddOn?[index]
-                            .productId ??
+                        .productId ??
                         "",
                     style: const TextStyle(
                       fontSize: 16.0,
@@ -656,198 +617,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         });
   }
 
-  ///FEATURED ITEMS LISTVIEW
-  featuredListView() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: controller.featuredItemList.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: (){
-              Get.toNamed(Routes.featuredDetailScreen, arguments: {
-                "isMate": checking,
-                "productCode":
-                controller.featuredItemList[index].productCode ?? ""
-              });
-            },
-            child: SizedBox(
-              width: 180,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      width: 150,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: (controller
-                                    .featuredItemList[index].productImagePath !=
-                                null)
-                            ? Image.network(
-                                controller.featuredItemList[index]
-                                        .productImagePath ??
-                                    "",
-                                fit: BoxFit.fill,
-                          errorBuilder: (BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                              Assets.noproductImage,
-                              fit: BoxFit.fill,
-                            ); // Display error message
-                          },
-                              )
-                            : Image.asset(
-                                Assets.food3,
-                                fit: BoxFit.fill,
-                              ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      controller.featuredItemList[index].name ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "\$ ${controller.featuredItemList[index].sellingCost ?? ""}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 15, color: MyColors.black),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Flexible(
-                            child: Text(
-                              "Chinese",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(fontSize: 15, color: MyColors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
-
-  ///MOST POPULAR
-  mostPopularListView() {
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: controller.mostPopularBookList.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              print("12333");
-              Get.toNamed(Routes.featuredDetailScreen, arguments: {
-                "isMate": checking,
-                "productCode":
-                controller.mostPopularBookList[index].productCode ?? ""
-              });
-            },
-            child: SizedBox(
-              width: 180,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 150,
-                      width: 150,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: controller.mostPopularBookList[index]
-                                    .productImagePath !=
-                                null
-                            ? Image.network(
-                                controller.mostPopularBookList[index]
-                                        .productImagePath ??
-                                    "",
-                                fit: BoxFit.fill,
-                          errorBuilder: (BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                              Assets.noproductImage,
-                              fit: BoxFit.fill,
-                            ); // Display error message
-                          },
-                              )
-                            : Image.asset(
-                                Assets.item,
-                                fit: BoxFit.fill,
-                              ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      controller.mostPopularBookList[index].name ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "\$ ${controller.mostPopularBookList[index].sellingCost ?? ""}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                  fontSize: 15, color: MyColors.black),
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          const Flexible(
-                            child: Text(
-                              "Chinese",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(fontSize: 15, color: MyColors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
 
   buildAppBarCartButton() {
     return Obx(() {
@@ -859,7 +628,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 "isMate": true,
                 "Products": controller.cartAddedProduct
               })
-                  // arguments: controller.cartAddedProduct)
+              // arguments: controller.cartAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();
@@ -889,7 +658,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 "isMate": false,
                 "Products": controller.mateAddedProduct
               })
-                  // arguments: controller.mateAddedProduct)
+              // arguments: controller.mateAddedProduct)
                   ?.then((value) {
                 if (value == true) {
                   initData();

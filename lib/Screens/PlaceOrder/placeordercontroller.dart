@@ -121,6 +121,19 @@ class PlaceOrderController extends GetxController with StateMixin {
     }
   }
 
+  Future<void> updateProductCount1() async {
+    for (var product in selectedItems) {
+      cartService.martItems.firstWhereOrNull((element) {
+        if (element.productCode == product.productCode) {
+          product.qtyCount = element.qtyCount;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+  }
+
   getAddress() async {
     isLoading.value = true;
     loginUser = await PreferenceHelper.getUserData();

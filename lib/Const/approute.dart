@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../Screens/Category/ProductDetail/productdetailscreen.dart';
+import '../Screens/Category/ProductFeatured/FeaturedScreen.dart';
 import '../Screens/Category/ProductListing/productlistingscreen.dart';
 import '../Screens/Dashboard/dashboardscreen.dart';
 import '../Screens/ForgotPassword/forgototppasswordscreen.dart';
@@ -41,6 +42,7 @@ class Routes {
   static const String addNewAddressScreen = "/AddNewAddressScreen";
   static const String productListingScreen = "/ProductListingScreen";
   static const String productDetailScreen = "/ProductDetailScreen";
+  static const String featuredDetailScreen = "/FeaturedDetailScreen";
   static const String placeOrderScreen = "/PlaceOrderScreen";
   static const String oTPScreen = "/OTPScreen";
   static const String forgotPasswordScreen = "/ForgotPasswordScreen";
@@ -52,9 +54,8 @@ class Routes {
 
 final pages = [
   GetPage(name: Routes.initialRoute, page: () => const SplashScreen()),
-  GetPage(
-      name: Routes.productDetailScreen,
-      page: () => const ProductDetailScreen()),
+  GetPage(name: Routes.productDetailScreen, page: () => const ProductDetailScreen()),
+  GetPage(name: Routes.featuredDetailScreen, page: () => const FeatureedScreen()),
   GetPage(
       name: Routes.walkthroughScreen1, page: () => const WalkthroughScreen1()),
   GetPage(

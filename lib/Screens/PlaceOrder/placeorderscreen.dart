@@ -44,6 +44,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
     getUserData();
     final dynamic arguments = Get.arguments;
     checking = arguments["isMate"] as bool;
+    print("============checking");
+    print(checking);
     ProductDetailController _cartController =
         Get.put(ProductDetailController());
     if (checking == true) {
@@ -55,6 +57,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       controller.selectedItems = _cartController.mateAddedProduct.value;
       controller.cartService.mateChangeStream.listen((_) {});
     }
+    print("controller.selectedItems");
+    print(controller.selectedItems.length);
     controller.getAddress();
   }
 
@@ -378,27 +382,159 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Card(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: const BorderSide(
-                            color: MyColors.grey,
-                          )),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 10,
+                    // Card(
+                    //   elevation: 0,
+                    //   shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(5.0),
+                    //       side: const BorderSide(
+                    //         color: MyColors.grey,
+                    //       )),
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.symmetric(
+                    //       horizontal: 10,
+                    //       vertical: 10,
+                    //     ),
+                    //     child: Text(
+                    //       controller.selectedItems[index].qtyCount.toString(),
+                    //       style: const TextStyle(
+                    //         fontWeight: FontWeight.normal,
+                    //         color: MyColors.primaryCustom,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 3,
+                        bottom: 0,
+                        right: 20,
+                      ),
+                      child: Card(
+                        color: MyColors.mainTheme,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(6)),
                         ),
-                        child: Text(
-                          controller.selectedItems[index].qtyCount.toString(),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: MyColors.primaryCustom,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5.5),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+
+                                  if (checking == true) {
+                                    setState(() {
+                                      controller.cartService
+                                          .removeFromCart(
+                                          product: controller
+                                              .selectedItems[
+                                          index]);
+                                      controller.updateProductCount();
+                                    });
+                                    await PreferenceHelper.saveCartData(controller.selectedItems);
+                                  }
+
+                                  if (checking == false) {
+                                    setState(() {
+                                      controller.cartService
+                                          .removeFromCart1(
+                                          product: controller
+                                              .selectedItems[index]);
+                                      controller.updateProductCount1();
+                                    });
+                                    await PreferenceHelper.savemateData(controller.selectedItems);
+                                  }
+                                  await checkEmptyCart(index: index);
+                                },
+                                child: Container(
+                                  child: const Icon(
+                                    Icons.remove,
+                                    color: MyColors.whiteTextFormField,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(
+                                      milliseconds: 300),
+                                  transitionBuilder: (Widget child,
+                                      Animation<double> animation) {
+                                    return ScaleTransition(
+                                        scale: animation,
+                                        child: child);
+                                  },
+                                  child: SizedBox(
+                                    width: 20,
+                                    child: Text(
+                                      '${controller.selectedItems[index].qtyCount.toInt()}',
+                                      key: ValueKey<int>(
+                                        controller
+                                            .selectedItems[
+                                        index]
+                                            .qtyCount
+                                            .toInt() ??
+                                            0,
+                                      ),
+                                      style: TextStyle(
+                                        fontFamily: MyFont.myFont,
+                                        color: MyColors.whiteTextFormField,
+                                        fontSize: 14,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+
+                                  if (checking == true) {
+                                    setState(() {
+                                      controller.cartService
+                                          .addToCart(
+                                          product: controller
+                                              .selectedItems[
+                                          index]);
+                                      controller
+                                          .updateProductCount();
+                                    });
+
+                                    await PreferenceHelper.saveCartData(controller.selectedItems);
+                                  }
+
+                                  if (checking == false) {
+                                    setState(() {
+                                      controller.cartService
+                                          .addToCart1(
+                                          product: controller
+                                              .selectedItems[
+                                          index]);
+                                      controller
+                                          .updateProductCount1();
+                                    });
+
+                                    await PreferenceHelper.savemateData(controller.selectedItems);
+                                  }                                },
+                                child: Container(
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: MyColors.whiteTextFormField,
+                                    size: 18,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
                     ),
+
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -535,4 +671,20 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
             "Add your Delivery Address",
           ));
   }
+
+  Future<void> checkEmptyCart({required index}) async {
+    if (controller.selectedItems[index].qtyCount == 0) {
+      controller.selectedItems.removeAt(index);
+    }
+    if (checking == true) {
+      await PreferenceHelper.saveCartData(controller.selectedItems);
+    }
+
+    if (checking == false) {
+      await PreferenceHelper.savemateData(controller.selectedItems);
+    }    if (controller.selectedItems.isEmpty) {
+      Get.back();
+    }
+  }
+
 }
