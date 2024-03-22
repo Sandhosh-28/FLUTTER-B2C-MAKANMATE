@@ -22,11 +22,11 @@ class ProductDetailController extends GetxController with StateMixin {
 
   final CartService cartService = getIt<CartService>();
 
-  List<ProductModel> allmostPopularBookList = [];
+  List<ProductModel> allMostPopularBookList = [];
   List<ProductModel> mostPopularBookList = [];
   // List<ProductModel> martPopularBookList = [];
 
-  List<ProductModel> allfeaturedItemList = [];
+  List<ProductModel> allFeaturedItemList = [];
   List<ProductModel> featuredItemList = [];
 
   ///PRODUCT GET BY CODE
@@ -123,7 +123,7 @@ class ProductDetailController extends GetxController with StateMixin {
             // mostPopularBookList = (response.apiResponseModel!.data as List)
             //     .map((e) => ProductModel.fromJson(e))
             //     .toList();
-            allmostPopularBookList = (response.apiResponseModel!.data as List)
+            allMostPopularBookList = (response.apiResponseModel!.data as List)
                 .map((e) => ProductModel.fromJson(e))
                 .toList();
 
@@ -135,15 +135,15 @@ class ProductDetailController extends GetxController with StateMixin {
             //   }
             // }
             if (isMate == true) {
-              for (var all in allmostPopularBookList!) {
+              for (var all in allMostPopularBookList!) {
                 if (all.productType == 'MATE') {
                   mostPopularBookList.add(all);
                 }
               }
             }
 
-            if (isMate  == false) {
-              for (var all in allmostPopularBookList!) {
+            if (isMate == false) {
+              for (var all in allMostPopularBookList!) {
                 if (all.productType == 'MART') {
                   mostPopularBookList.add(all);
                 }
@@ -186,26 +186,25 @@ class ProductDetailController extends GetxController with StateMixin {
         if (response.apiResponseModel!.data != null) {
           List? resJson = response.apiResponseModel!.data!;
           if (resJson != null) {
-            allfeaturedItemList = (response.apiResponseModel!.data as List)
+            allFeaturedItemList = (response.apiResponseModel!.data as List)
                 .map((e) => ProductModel.fromJson(e))
                 .toList();
 
             if (isMate == true) {
-              for (var all in allfeaturedItemList!) {
+              for (var all in allFeaturedItemList!) {
                 if (all.productType == 'MATE') {
                   featuredItemList.add(all);
                 }
               }
             }
 
-            if (isMate  == false) {
-              for (var all in allfeaturedItemList!) {
+            if (isMate == false) {
+              for (var all in allFeaturedItemList!) {
                 if (all.productType == 'MART') {
                   featuredItemList.add(all);
                 }
               }
             }
-
 
             change(null, status: RxStatus.success());
             return;
