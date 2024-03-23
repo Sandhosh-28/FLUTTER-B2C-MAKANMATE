@@ -676,6 +676,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   ///FEATURED ITEMS LISTVIEW
+  ///FEATURED ITEMS LISTVIEW
   featuredListView() {
     return ListView.builder(
         shrinkWrap: true,
