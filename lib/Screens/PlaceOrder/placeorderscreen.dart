@@ -686,5 +686,4 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       Get.back();
     }
   }
-
 }
