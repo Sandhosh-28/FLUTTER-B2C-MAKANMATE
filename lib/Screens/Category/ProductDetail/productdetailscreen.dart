@@ -107,8 +107,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 background: Image.network(
                   controller.productList.first.productImagePath ?? "",
                   fit: BoxFit.fill,
-                  errorBuilder: (BuildContext context,
-                      Object error,
+                  errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) {
                     return Image.asset(
                       Assets.noproductImage,
@@ -500,38 +499,58 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                           const SizedBox(height: 20),
                           if (controller.featuredItemList.isNotEmpty)
-                          const Text(
-                            "Featured Items",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Featured Items",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Get.toNamed(Routes.featuredItemList);
+                                    },
+                                    child: const Text("View All"))
+                              ],
                             ),
-                          ),
                           const SizedBox(height: 20),
                           if (controller.featuredItemList.isNotEmpty)
-                          SizedBox(
-                            height: 255,
-                            child: featuredListView(),
-                          ),
+                            SizedBox(
+                              height: 255,
+                              child: featuredListView(),
+                            ),
                           const SizedBox(height: 10),
                           if (controller.mostPopularBookList.isNotEmpty)
-                          const Text(
-                            "Most Popular",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  "Most Popular",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                                TextButton(
+                                    onPressed: () {
+                                      Get.toNamed(Routes.mostPopularItemList);
+                                    },
+                                    child: const Text("View All"))
+                              ],
                             ),
-                          ),
                           const SizedBox(height: 20),
                           if (controller.mostPopularBookList.isNotEmpty)
                             SizedBox(
-                            height: 255,
-                            child: mostPopularListView(),
-                          ),
+                              height: 255,
+                              child: mostPopularListView(),
+                            ),
                         ],
                       ),
                     ),
@@ -657,18 +676,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   ///FEATURED ITEMS LISTVIEW
+  ///FEATURED ITEMS LISTVIEW
   featuredListView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: controller.featuredItemList.length,
+        itemCount: controller.featuredItemList.length >= 5
+            ? 5
+            : controller.featuredItemList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.toNamed(Routes.featuredDetailScreen, arguments: {
                 "isMate": checking,
                 "productCode":
-                controller.featuredItemList[index].productCode ?? ""
+                    controller.featuredItemList[index].productCode ?? ""
               });
             },
             child: SizedBox(
@@ -691,14 +713,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         .productImagePath ??
                                     "",
                                 fit: BoxFit.fill,
-                          errorBuilder: (BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                              Assets.noproductImage,
-                              fit: BoxFit.fill,
-                            ); // Display error message
-                          },
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    Assets.noproductImage,
+                                    fit: BoxFit.fill,
+                                  ); // Display error message
+                                },
                               )
                             : Image.asset(
                                 Assets.food3,
@@ -737,8 +758,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               "Chinese",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(fontSize: 15, color: MyColors.black),
+                              style: TextStyle(
+                                  fontSize: 15, color: MyColors.black),
                             ),
                           ),
                         ],
@@ -756,7 +777,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   mostPopularListView() {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: controller.mostPopularBookList.length,
+        itemCount: controller.mostPopularBookList.length >= 5
+            ? 5
+            : controller.mostPopularBookList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -765,7 +788,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Get.toNamed(Routes.featuredDetailScreen, arguments: {
                 "isMate": checking,
                 "productCode":
-                controller.mostPopularBookList[index].productCode ?? ""
+                    controller.mostPopularBookList[index].productCode ?? ""
               });
             },
             child: SizedBox(
@@ -788,14 +811,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         .productImagePath ??
                                     "",
                                 fit: BoxFit.fill,
-                          errorBuilder: (BuildContext context,
-                              Object error,
-                              StackTrace? stackTrace) {
-                            return Image.asset(
-                              Assets.noproductImage,
-                              fit: BoxFit.fill,
-                            ); // Display error message
-                          },
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return Image.asset(
+                                    Assets.noproductImage,
+                                    fit: BoxFit.fill,
+                                  ); // Display error message
+                                },
                               )
                             : Image.asset(
                                 Assets.item,
@@ -834,8 +856,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               "Chinese",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  TextStyle(fontSize: 15, color: MyColors.black),
+                              style: TextStyle(
+                                  fontSize: 15, color: MyColors.black),
                             ),
                           ),
                         ],
@@ -922,7 +944,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 padding: EdgeInsets.only(right: 11.0),
                 child: Icon(
                   Icons.shopping_cart_outlined,
-                  color: MyColors.black,
+                  color: MyColors.grey,
                 ),
               ),
               if (checking == true && controller.cartAddedProduct.isNotEmpty)

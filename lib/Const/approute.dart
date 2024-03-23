@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../Screens/Category/ProductDetail/featureditemsscreen.dart';
+import '../Screens/Category/ProductDetail/mostpopularscreen.dart';
 import '../Screens/Category/ProductDetail/productdetailscreen.dart';
 import '../Screens/Category/ProductFeatured/FeaturedScreen.dart';
 import '../Screens/Category/ProductListing/productlistingscreen.dart';
@@ -50,12 +52,17 @@ class Routes {
   static const String newPasswordScreen = "/NewPasswordScreen";
   static const String orderScreen = "/OrderScreen";
   static const String orderDetailScreen = "/OrderDetailScreen";
+  static const String featuredItemList = "/FeaturedItemList";
+  static const String mostPopularItemList = "/MostPopularItemList";
 }
 
 final pages = [
   GetPage(name: Routes.initialRoute, page: () => const SplashScreen()),
-  GetPage(name: Routes.productDetailScreen, page: () => const ProductDetailScreen()),
-  GetPage(name: Routes.featuredDetailScreen, page: () => const FeatureedScreen()),
+  GetPage(
+      name: Routes.productDetailScreen,
+      page: () => const ProductDetailScreen()),
+  GetPage(
+      name: Routes.featuredDetailScreen, page: () => const FeatureedScreen()),
   GetPage(
       name: Routes.walkthroughScreen1, page: () => const WalkthroughScreen1()),
   GetPage(
@@ -101,4 +108,8 @@ final pages = [
   GetPage(name: Routes.orderScreen, page: () => const OrderScreen()),
   GetPage(
       name: Routes.orderDetailScreen, page: () => const OrderDetailScreen()),
+  GetPage(name: Routes.featuredItemList, page: () => const FeaturedItemList()),
+  GetPage(
+      name: Routes.mostPopularItemList,
+      page: () => const MostPopularItemList()),
 ];
