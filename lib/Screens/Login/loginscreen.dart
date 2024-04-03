@@ -26,6 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // TODO: implement initState
     super.initState();
     controller = Get.put(LoginController());
+    print("santhosh");
   }
 
   @override
